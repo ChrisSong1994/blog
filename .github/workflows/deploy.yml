@@ -25,6 +25,6 @@ jobs:
             cache: yarn
 
       - name: Dependencies Install & Build & Start
-        run: yarn add .
+        run: yarn 
              yarn run build --if-present
              yarn run start --if-present
