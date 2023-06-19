@@ -18,13 +18,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Nodejs Version
+      - name: Dependencies Install & Build & Start
         uses: actions/setup-node@v3
         with:
             node-version: 16
-            cache: yarn
+            cache: npm
 
-      - name: Dependencies Install & Build & Start
-        run: yarn 
-             yarn run build --if-present
-             yarn run start --if-present
+      - run: npm install 
+      - run: npm run build 
+      - run: npm run start 
