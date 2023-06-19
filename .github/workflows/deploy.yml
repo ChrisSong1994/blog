@@ -1,0 +1,30 @@
+# Sample workflow for building and deploying a Next.js site to GitHub Pages
+#
+# To get started with Next.js see: https://nextjs.org/docs/getting-started
+#
+name: Deploy Blog Site
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: 
+        - main
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Nodejs Version
+        uses: actions/setup-node@v3
+        with:
+            node-version: 16
+            cache: yarn
+
+      - name: Dependencies Install & Build & Start
+        run: yarn install
+             yarn run build --if-present
+             yarn run start --if-present
