@@ -1,8 +1,5 @@
 import DateFormatter from "./date-formatter";
 
-import PostTitle from "./post-title";
-import type Author from "../interfaces/author";
-
 type Props = {
   title: string;
   date: string;
@@ -11,12 +8,12 @@ type Props = {
 const PostHeader = ({ title, date }: Props) => {
   return (
     <>
-      <PostTitle>{title}</PostTitle>
+      <h1 className="text-5xl  font-bold tracking-tighter leading-tight  mb-12 text-left">
+        {title}
+      </h1>
 
-      <div className="max-w-2xl mx-auto">
-        <div className="mb-6 text-lg">
-          <DateFormatter dateString={date} />
-        </div>
+      <div className="mb-6 text-lg">
+        <DateFormatter dateString={date} />
       </div>
     </>
   );

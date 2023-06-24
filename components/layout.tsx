@@ -6,11 +6,11 @@ type Props = {
   children: React.ReactNode;
 };
 
-const Layout = ({ preview, children }: Props) => {
+const Layout = ({ children }: Props) => {
   return (
     <>
       <Meta />
-      <div className="min-h-screen">
+      <div className="min-h-screen max-w-3xl mx-auto">
         <main>{children}</main>
       </div>
       <Footer />

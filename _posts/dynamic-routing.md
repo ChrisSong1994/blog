@@ -11,13 +11,9 @@ date: '2020-03-16T05:35:07.322Z'
 ### 1.初始化项目
 
 ``` bash
-mkdir project-name
-cd project-name
-npm init
-```
-
-``` js
-console.log('hello')
+ mkdir project-name
+ cd project-name
+ npm init
 ```
 
 ### 2.package.json 配置
@@ -76,26 +72,26 @@ SemVer（Semantic Versioning，语义化版本控制）是 Github 起草的一�
 - 搜索项目名查看是否有重名项目
 
 ```bash
-npm search package-name
+ npm search package-name
 ```
 
 - 注册登录
 
 ```bash
-npm login
+ npm login
 ```
 
 - 发布
 
 ```bash
-cd project-dir
-npm publish --access public
+ cd project-dir
+ npm publish --access public
 ```
 
 - 安装测试
 
 ```bash
-npm install package-name
+ npm install package-name
 ```
 
 **常用 npm 命令表**
