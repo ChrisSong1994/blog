@@ -1,38 +1,28 @@
-import Container from "../components/container";
-import HeroPost from "../components/hero-post";
+import PostList from "../components/post-list";
 import Layout from "../components/layout";
+import Intro from "../components/intro";
 import { getAllPosts } from "../lib/api";
 import Post from "../interfaces/post";
 
 type Props = {
-  allPosts: Post[];
+  posts: Post[];
 };
 
-export default function Index({ allPosts }: Props) {
-  const heroPost = allPosts[0];
-
+export default function Index({ posts }: Props) {
   return (
     <>
       <Layout>
-        <Container>
-          {heroPost && (
-            <HeroPost
-              title={heroPost.title}
-              date={heroPost.date}
-              slug={heroPost.slug}
-              excerpt={heroPost.excerpt}
-            />
-          )}
-        </Container>
+        <Intro />
+        <PostList data={posts} />
       </Layout>
     </>
   );
 }
 
 export const getStaticProps = async () => {
-  const allPosts = getAllPosts(["title", "date", "slug", "excerpt"]);
+  const posts = getAllPosts(["title", "date", "slug", "excerpt"]);
 
   return {
-    props: { allPosts },
+    props: { posts },
   };
 };

@@ -1,16 +1,16 @@
 ---
-title: '如何发布自己的 npm 包'
-excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Praesent elementum facilisis leo vel fringilla est ullamcorper eget. At imperdiet dui accumsan sit amet nulla facilities morbi tempus.'
-date: '2020-03-16T05:35:07.322Z'
+title: "如何发布自己的 npm 包"
+date: "2020-03-16T05:35:07.322Z"
+tag: ["npm"]
 ---
-## 如何发布自己的 npm 包
 
+## 如何发布自己的 npm 包
 
 作为一名前端开发人员安装使用 npm 包是日常工作的一部分，优秀的 npm 包为我们提供了很多便利，也为我们的开发节省了很多的时间。很多公司都会拥有自己的私有 npm 仓库用于管理私有的 npm 包，所以学习开发发布一个好用 **No Bug npm** 包是一项很重要的技能，下面我会结合自己的实战心得总结下发布一个 npm 包的流程。
 
 ### 1.初始化项目
 
-``` bash
+```bash
  mkdir project-name
  cd project-name
  npm init
