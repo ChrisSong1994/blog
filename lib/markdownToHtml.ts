@@ -1,15 +1,24 @@
-import { remark } from "remark";
-import remarkGfm from "remark-gfm";
-import remarkToc from "remark-toc";
-import html from "remark-html";
-import rehypeHighlight from "rehype-highlight";
+import MarkdownIt from "markdown-it";
+import hljs from "highlight.js";
 
-export default async function markdownToHtml(markdown: string) {
-  const result = await remark()
-    .use(html)
-    .use(remarkGfm)
-    .use(remarkToc)
-    .use(rehypeHighlight)
-    .process(markdown);
-  return result.toString();
+export default async function markdownToHtml(value: string) {
+  const md = MarkdownIt({
+    highlight: function (str, lang) {
+      if (lang && hljs.getLanguage(lang)) {
+        try {
+          return (
+            '<pre class="hljs"><code>' +
+            hljs.highlight(str, { language: lang, ignoreIllegals: true })
+              .value +
+            "</code></pre>"
+          );
+        } catch (__) {}
+      }
+
+      return (
+        '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + "</code></pre>"
+      );
+    },
+  });
+  return md.render(value);
 }

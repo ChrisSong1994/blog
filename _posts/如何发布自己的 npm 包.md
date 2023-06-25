@@ -1,23 +1,19 @@
 ---
-title: '如何发布自己的 npm 包'
-excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Praesent elementum facilisis leo vel fringilla est ullamcorper eget. At imperdiet dui accumsan sit amet nulla facilities morbi tempus.'
-date: '2020-03-16T05:35:07.322Z'
+title: "如何发布自己的 npm 包"
+date: "2020-03-16T05:35:07.322Z"
+tag: ["npm"]
 ---
-## 如何发布自己的 npm 包
 
+## 如何发布自己的 npm 包
 
 作为一名前端开发人员安装使用 npm 包是日常工作的一部分，优秀的 npm 包为我们提供了很多便利，也为我们的开发节省了很多的时间。很多公司都会拥有自己的私有 npm 仓库用于管理私有的 npm 包，所以学习开发发布一个好用 **No Bug npm** 包是一项很重要的技能，下面我会结合自己的实战心得总结下发布一个 npm 包的流程。
 
 ### 1.初始化项目
 
-``` bash
-mkdir project-name
-cd project-name
-npm init
-```
-
-``` js
-console.log('hello')
+```bash
+ mkdir project-name
+ cd project-name
+ npm init
 ```
 
 ### 2.package.json 配置
@@ -76,26 +72,26 @@ SemVer（Semantic Versioning，语义化版本控制）是 Github 起草的一�
 - 搜索项目名查看是否有重名项目
 
 ```bash
-npm search package-name
+ npm search package-name
 ```
 
 - 注册登录
 
 ```bash
-npm login
+ npm login
 ```
 
 - 发布
 
 ```bash
-cd project-dir
-npm publish --access public
+ cd project-dir
+ npm publish --access public
 ```
 
 - 安装测试
 
 ```bash
-npm install package-name
+ npm install package-name
 ```
 
 **常用 npm 命令表**
