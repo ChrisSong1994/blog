@@ -1,11 +1,13 @@
 import { useRouter } from "next/router";
 import ErrorPage from "next/error";
-import Layout from "../../components/layout";
-import { getPostBySlug, getAllPosts } from "../../lib/api";
 import Head from "next/head";
-import DateFormatter from "../../components/date-formatter";
-import markdownToHtml from "../../lib/markdownToHtml";
-import type PostType from "../../interfaces/post";
+
+import Layout from "components/layout";
+import { getPostBySlug, getAllPosts } from "lib/api";
+import DateDdisplay from "components/date-display";
+import TagsDisplay from "components/tags-display";
+import markdownToHtml from "lib/markdownToHtml";
+import type PostType from "interfaces/post";
 import markdownStyles from "./markdown-styles.module.css";
 
 type Props = {
@@ -18,29 +20,29 @@ export default function Post({ post }: Props) {
   if (!router.isFallback && !post?.slug) {
     return <ErrorPage statusCode={404} />;
   }
+
   return (
     <Layout>
+      <Head>
+        <title>{post.title}</title>
+      </Head>
       {router.isFallback ? (
         <div>Loading…</div>
       ) : (
-        <>
-          <article className="mb-32">
-            <Head>
-              <title>{post.title}</title>
-            </Head>
-            <h1 className="text-5xl  font-bold tracking-tighter leading-tight  mb-12 text-left">
-              {post.title}
-            </h1>
+        <article className="bg-white rounded py-4 px-4">
+          <h1 className="text-5xl  font-bold tracking-tighter leading-tight  my-4 text-left">
+            {post.title}
+          </h1>
 
-            <div className="mb-6 text-lg">
-              <DateFormatter dateString={post.date} />
-            </div>
-            <div
-              className={markdownStyles["markdown"]}
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
-          </article>
-        </>
+          <div className="my-2 text-lg">
+            <DateDdisplay prefix="发布于" date={post.date} />
+            <TagsDisplay data={post.tags} />
+          </div>
+          <div
+            className={markdownStyles["markdown"]}
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
+        </article>
       )}
     </Layout>
   );
@@ -53,7 +55,13 @@ type Params = {
 };
 
 export async function getStaticProps({ params }: Params) {
-  const post = getPostBySlug(params.slug, ["title", "date", "slug", "content"]);
+  const post = getPostBySlug(params.slug, [
+    "title",
+    "date",
+    "slug",
+    "content",
+    "tags",
+  ]);
   const content = await markdownToHtml(post.content || "");
 
   return {

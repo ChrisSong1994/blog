@@ -1,9 +1,11 @@
 type PostType = {
-  slug: string
-  title: string
-  date: string
-  excerpt: string
-  content: string
-}
+  slug: string; // file name
+  title: string;
+  date: string;
+  excerpt: string;
+  content: string;
+  cover?: string;
+  tags?: Array<string>;
+};
 
-export default PostType
+export default PostType;
