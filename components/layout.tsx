@@ -9,7 +9,7 @@ const Layout = ({ children }: Props) => {
   return (
     <>
       <Head>
-        <link rel="shortcut icon" href="/favicon/favicon.ico" />
+        <link rel="shortcut icon" href="./favicon/favicon.ico" />
         <meta name="msapplication-TileColor" content="#000000" />
       </Head>
       <section>
