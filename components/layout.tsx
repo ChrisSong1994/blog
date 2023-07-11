@@ -13,7 +13,7 @@ const Layout = ({ children }: Props) => {
         <meta name="msapplication-TileColor" content="#000000" />
       </Head>
       <section>
-        <header className="px-8 blog-header flex justify-between">
+        <header className="px-8 blog-header flex justify-between fixed top-0 w-full">
           <h1 className="text-4xl font-bold tracking-tight leading-tight flex justify-between py-4">
             <Link href="/" className="hover:underline">
               ChrisSong Blog
@@ -47,7 +47,10 @@ const Layout = ({ children }: Props) => {
             </Link>
           </div>
         </header>
-        <main className="blog-content min-h-screen  max-w-5xl mx-auto my-6">
+        <main
+          className="blog-content max-w-5xl mx-auto py-6 "
+          style={{ minHeight: "calc(100vh - 115px)", marginTop: 75 }}
+        >
           {children}
         </main>
         <footer className="blog-footer py-2 text-center text-md">
