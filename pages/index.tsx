@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import dynamic from "next/dynamic";
 
+const TagsDisplay = dynamic(() => import("../components/tags-display"), {
+  // 仅client 渲染
+  ssr: false,
+});
 import Layout from "components/layout";
 import DateDisplay from "components/date-display";
-import TagsDisplay from "components/tags-display";
 import { getAllPosts } from "lib/api";
 import Post from "../interfaces/post";
-import postsList from "public/postsList.json";
 
 type Props = {
   posts: Post[];
@@ -24,7 +27,7 @@ export default function Index({ posts }: Props) {
           .map((post) => {
             const { slug, title, date, excerpt, tags } = post;
             return (
-              <div key={slug} className="mx-6 my-6">
+              <div key={slug} className="mx-6 mb-6">
                 <Link as={`/posts/${slug}`} href="/posts/[slug]">
                   <div className="bg-white rounded-m py-4 px-4">
                     <h3 className="text-2xl leading-tight font-bold mb-2 ">
