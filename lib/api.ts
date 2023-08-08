@@ -42,6 +42,7 @@ export function getPostBySlug(slug: string, fields: string[] = []) {
 export function getAllPosts(fields: string[] = []) {
   const slugs = getPostSlugs();
   const posts = slugs
+    .filter((slug) => /\.md$/.test(slug))
     .map((slug) => getPostBySlug(slug, fields))
     .sort((post1, post2) => (post1.date > post2.date ? -1 : 1));
   // // 这里创建索引信息存在根目录提供静态站点搜索
