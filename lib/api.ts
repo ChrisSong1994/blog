@@ -2,7 +2,7 @@ import fs from "fs-extra";
 import { join } from "path";
 import matter from "gray-matter";
 
-const postsDirectory = join(process.cwd(), "_posts");
+const postsDirectory = join(process.cwd(), "_posts/docs");
 const publicDirectory = join(process.cwd(), "public");
 const postsListJsonPath = join(publicDirectory, "postsList.json");
 
