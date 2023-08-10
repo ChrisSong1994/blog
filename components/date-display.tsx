@@ -10,7 +10,7 @@ const DateDisplay = ({ className = "", prefix = "", date }: Props) => {
   const value = parseISO(date);
   return (
     <time dateTime={date} className={`text-gray-500 ${className}`}>
-      {prefix} {format(value, "yyyy-MM-dd HH:mm")}
+      {prefix} {format(value, "yyyy-MM-dd")}
     </time>
   );
 };
