@@ -75,7 +75,7 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build and generate static resources with Next.js
-        run: ${{ steps.detect-package-manager.outputs.runner }} npm run build
+        run: ${{ steps.detect-package-manager.outputs.runner }} yarn run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
