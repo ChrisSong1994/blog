@@ -7,8 +7,8 @@
   "author": "chrissong <1352411860@qq.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "next",
-    "build": "next build",
+    "dev": " node ./scripts/blogConverter.js -w & next",
+    "build": "node ./scripts/blogConverter.js",
     "start": "next start",
     "typecheck": "tsc"
   },
@@ -16,7 +16,6 @@
     "@heroicons/react": "^2.0.18",
     "classnames": "^2.3.1",
     "date-fns": "^2.28.0",
-    "fs-extra": "^11.1.1",
     "gray-matter": "^4.0.3",
     "highlight.js": "^11.8.0",
     "markdown-it": "^13.0.1",
@@ -31,7 +30,12 @@
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "autoprefixer": "^10.4.7",
-    "copy-webpack-plugin": "^11.0.0",
-    "postcss": "^8.4.14"
+    "chokidar": "^3.5.3",
+    "fs-extra": "^11.1.1",
+    "node-fetch": "2",
+    "postcss": "^8.4.14",
+    "signale": "^1.4.0",
+    "yargs": "^17.7.2",
+    "yargs-parser": "^21.1.1"
   }
 }
