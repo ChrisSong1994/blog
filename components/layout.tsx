@@ -13,26 +13,42 @@ const Layout = ({ children }: Props) => {
         <meta name="msapplication-TileColor" content="#000000" />
       </Head>
       <section>
-        <header className="px-8 blog-header flex justify-between fixed top-0 w-full">
-          <h1 className="text-4xl font-bold tracking-tight leading-tight flex justify-between py-4">
-            <Link href="/" className="hover:underline">
-              ChrisSong Blog
-            </Link>
+        <header
+          style={{
+            paddingLeft: "2rem",
+            paddingRight: "2rem",
+            justifyContent: "space-between",
+            display: "flex",
+            position: "fixed",
+            top: 0,
+            width: "100%",
+          }}
+          className="blog-header"
+        >
+          <h1
+            style={{
+              fontWeight: 700,
+              fontSize: "2.25rem",
+              padding: "1rem 0",
+            }}
+          >
+            <Link href="/">ChrisSong Blog</Link>
           </h1>
-          <div className="flex justify-around w-80 items-center">
-            <Link href="/" className="hover:underline">
-              首页
-            </Link>
-            <Link href="/archives" className="hover:underline">
-              归档
-            </Link>
-            <Link href="/about" className="hover:underline">
-              关于
-            </Link>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+              alignItems: "center",
+              width: "20rem",
+            }}
+          >
+            <Link href="/">首页</Link>
+            <Link href="/archives">归档</Link>
+            <Link href="/about">关于</Link>
             <Link
               href="https://github.com/ChrisSong1994"
               target="__blank"
-              className="hover:underline text-4xl"
+              className="hover:underline"
             >
               <svg
                 height="28"
@@ -48,12 +64,25 @@ const Layout = ({ children }: Props) => {
           </div>
         </header>
         <main
-          className="blog-content max-w-5xl mx-auto py-6 "
-          style={{ minHeight: "calc(100vh - 115px)", marginTop: 75 }}
+          className="blog-content"
+          style={{
+            minHeight: "calc(100vh - 115px)",
+            paddingTop: "1.5rem",
+            margin: "0 auto",
+            marginTop: 75,
+            maxWidth: "64rem",
+          }}
         >
           {children}
         </main>
-        <footer className="blog-footer py-2 text-center text-md">
+        <footer
+          className="blog-footer"
+          style={{
+            textAlign: "center",
+            paddingTop: "0.5rem",
+            paddingBottom: "0.5rem",
+          }}
+        >
           Copyright © 2023 ChrisSong
         </footer>
       </section>
