@@ -3,6 +3,9 @@ import hljs from "highlight.js";
 
 export default async function markdownToHtml(value: string) {
   const md = MarkdownIt({
+    html: true,
+    linkify: true,
+    breaks: true,
     highlight: function (str, lang) {
       if (lang && hljs.getLanguage(lang)) {
         try {
@@ -20,5 +23,6 @@ export default async function markdownToHtml(value: string) {
       );
     },
   });
+  // md.linkify.set({ fuzzyEmail: false });
   return md.render(value);
 }

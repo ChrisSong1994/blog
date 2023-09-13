@@ -9,7 +9,7 @@ type Props = {
 const DateDisplay = ({ className = "", prefix = "", date }: Props) => {
   const value = parseISO(date);
   return (
-    <time dateTime={date} className={`text-gray-500 ${className}`}>
+    <time dateTime={date} className={`${className}`} style={{color:'#c8c8c9'}} >
       {prefix} {format(value, "yyyy-MM-dd")}
     </time>
   );

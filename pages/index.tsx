@@ -27,13 +27,32 @@ export default function Index({ posts }: Props) {
           .map((post) => {
             const { slug, title, date, excerpt, tags } = post;
             return (
-              <div key={slug} className="mx-6 mb-6">
+              <div key={slug} style={{ margin: "0 1.5rem 1.5rem" }}>
                 <Link as={`/posts/${slug}`} href="/posts/[slug]">
-                  <div className="bg-white rounded-m py-4 px-4">
-                    <h3 className="text-2xl leading-tight font-bold mb-2 ">
+                  <div
+                    style={{
+                      padding: "1rem",
+                      backgroundColor: "#fff",
+                    }}
+                  >
+                    <h3
+                      style={{
+                        fontWeight: 700,
+                        fontSize: "1.5rem",
+                        margin:0,
+                        marginBottom: "0.5rem",
+                      }}
+                    >
                       {title}
                     </h3>
-                    <p className="text-gray-400 mb-2">{excerpt}</p>
+                    <p
+                      style={{
+                        color: "#BFBFBF",
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      {excerpt}
+                    </p>
                     <div>
                       <DateDisplay prefix="发布于 " date={date} />
                       <TagsDisplay data={tags} />

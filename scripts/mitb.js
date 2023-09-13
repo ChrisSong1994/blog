@@ -10,7 +10,7 @@ const cwd = process.cwd();
  * @param {string} input
  */
 function parseMarkdownImagesUrls(input, filter) {
-  const reg = /\!\[.*\]\((.*)\)/g;
+  const reg = /.*\!\[.*\]\((.*)\).*/g;
   const matchs = [...input.matchAll(reg)];
   let urls = matchs.map((m) => m[1]).filter((url) => url.startsWith("http")); // 过滤掉 base64 和 相对路径
 
@@ -27,10 +27,12 @@ function parseMarkdownImagesUrls(input, filter) {
  *  @param {number} quality // 图片压缩比
  */
 async function imageUrlConvertToBase64(url) {
+  console.log('url',url)
+  const ext = path.parse(new URL(url).pathname).ext 
   const response = await fetch(url);
   const result = await response.arrayBuffer();
   const base64 = Buffer.from(result).toString("base64");
-  return `data:image/jpeg;base64,${base64}`;
+  return `data:image/${ext.replace('.','')};base64,${base64}`;
 }
 
 /**

@@ -29,12 +29,30 @@ export default function Post({ post }: Props) {
       {router.isFallback ? (
         <div>Loading…</div>
       ) : (
-        <article className="bg-white rounded py-4 px-4">
-          <h1 className="text-5xl  font-bold tracking-tighter leading-tight  my-4 text-left">
+        <article
+          style={{
+            backgroundColor: "#fff",
+            padding: "1rem",
+          }}
+        >
+          <h1
+            style={{
+              fontWeight: 700,
+              fontSize: "2.5rem",
+              textAlign: "left",
+              margin: "1rem 0",
+            }}
+          >
             {post.title}
           </h1>
 
-          <div className="my-2 text-lg">
+          <div
+            style={{
+              margin: "0.5rem 0",
+              fontSize: "1.125rem",
+              lineHeight: "1.75rem",
+            }}
+          >
             <DateDdisplay prefix="发布于" date={post.date} />
             <TagsDisplay data={post.tags} />
           </div>
