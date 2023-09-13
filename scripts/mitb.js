@@ -27,7 +27,6 @@ function parseMarkdownImagesUrls(input, filter) {
  *  @param {number} quality // 图片压缩比
  */
 async function imageUrlConvertToBase64(url) {
-  console.log('url',url)
   const ext = path.parse(new URL(url).pathname).ext 
   const response = await fetch(url);
   const result = await response.arrayBuffer();

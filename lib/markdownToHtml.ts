@@ -1,4 +1,7 @@
 import MarkdownIt from "markdown-it";
+import MarkdownItEmoji from 'markdown-it-emoji'
+import MarkdownItMark from 'markdown-it-mark'
+
 import hljs from "highlight.js";
 
 export default async function markdownToHtml(value: string) {
@@ -23,6 +26,8 @@ export default async function markdownToHtml(value: string) {
       );
     },
   });
-  // md.linkify.set({ fuzzyEmail: false });
+  md.use(MarkdownItEmoji)
+  md.use(MarkdownItMark)
+  md.linkify.set({ fuzzyEmail: false });
   return md.render(value);
 }

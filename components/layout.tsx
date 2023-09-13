@@ -68,7 +68,7 @@ const Layout = ({ children }: Props) => {
         <main
           className="blog-content"
           style={{
-            minHeight: "calc(100vh - 115px)",
+            minHeight: "calc(100vh - 140px)",
             paddingTop: "1.5rem",
             margin: "0 auto",
             marginTop: 75,
