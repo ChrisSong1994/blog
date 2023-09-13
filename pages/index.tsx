@@ -39,6 +39,7 @@ export default function Index({ posts }: Props) {
                       style={{
                         fontWeight: 700,
                         fontSize: "1.5rem",
+                        margin:0,
                         marginBottom: "0.5rem",
                       }}
                     >

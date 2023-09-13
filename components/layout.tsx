@@ -17,6 +17,7 @@ const Layout = ({ children }: Props) => {
           style={{
             paddingLeft: "2rem",
             paddingRight: "2rem",
+            boxSizing: 'border-box',
             justifyContent: "space-between",
             display: "flex",
             position: "fixed",
@@ -30,6 +31,7 @@ const Layout = ({ children }: Props) => {
               fontWeight: 700,
               fontSize: "2.25rem",
               padding: "1rem 0",
+              margin:0
             }}
           >
             <Link href="/">ChrisSong Blog</Link>
@@ -48,7 +50,7 @@ const Layout = ({ children }: Props) => {
             <Link
               href="https://github.com/ChrisSong1994"
               target="__blank"
-              className="hover:underline"
+              
             >
               <svg
                 height="28"

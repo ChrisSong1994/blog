@@ -23,9 +23,31 @@ tags: ["React"]
 #### 绘制：
 开始根据元素样式绘制所有节点。
 ## Virtual DOM
-Virtual DOM 是 DOM 作为 JavaScript 对象的表示。这是一个由JS库和框架实现的概念，以实现状态驱动的UI开发。其有助于React进行批处理状态更改并处理平滑的状态转换。<br />当讨论 React Virtual DOM 时，说它帮助React只重新渲染需要更新的浏览器DOM树的那些部分，这没错。但是，如果说使用原生 JS 做 DOM 操作总是导致重新渲染整个页面，这是不正确的。<br />我做了两个简单的时钟项目（一个用原生 JS 一个用 React）用于解释；<br />![clock.gif](https://cdn.nlark.com/yuque/0/2023/gif/241994/1694155112819-fe2498e0-1f36-4331-944f-9a46371f556f.gif#averageHue=%23f7f7fd&clientId=u944a1cf4-6a39-4&from=ui&id=u95739489&originHeight=888&originWidth=1904&originalType=binary&ratio=2&rotation=0&showTitle=false&size=4009827&status=done&style=none&taskId=uec19f6d2-0299-4880-a663-039b44658c0&title=)<br />原生 JS 源码: [https://github.com/Naman-Saxena1/clock-example-vanilla-js](https://github.com/Naman-Saxena1/clock-example-vanilla-js)<br />React 源码: [https://github.com/Naman-Saxena1/clock-example-react](https://github.com/Naman-Saxena1/clock-example-react)
+Virtual DOM 是 DOM 作为 JavaScript 对象的表示。这是一个由JS库和框架实现的概念，以实现状态驱动的UI开发。其有助于React进行批处理状态更改并处理平滑的状态转换。<br />当讨论 React Virtual DOM 时，说它帮助React只重新渲染需要更新的浏览器DOM树的那些部分，这没错。但是，如果说使用原生 JS 做 DOM 操作总是导致重新渲染整个页面，这是不正确的。<br />我做了两个简单的时钟项目（一个用原生 JS 一个用 React）用于解释；<br />
+
+![clock.gif](https://cdn.nlark.com/yuque/0/2023/gif/241994/1694155112819-fe2498e0-1f36-4331-944f-9a46371f556f.gif#averageHue=%23f7f7fd&clientId=u944a1cf4-6a39-4&from=ui&id=u95739489&originHeight=888&originWidth=1904&originalType=binary&ratio=2&rotation=0&showTitle=false&size=4009827&status=done&style=none&taskId=uec19f6d2-0299-4880-a663-039b44658c0&title=)
+<br />
+原生 JS 源码: [https://github.com/Naman-Saxena1/clock-example-vanilla-js](https://github.com/Naman-Saxena1/clock-example-vanilla-js)<br />React 源码: [https://github.com/Naman-Saxena1/clock-example-react](https://github.com/Naman-Saxena1/clock-example-react)
 ## 为什么需要 Virtual DOM
-当我们在React应用程序中进行任何状态更改时，它会创建一个包含最新版本的整个 Virtual DOM 树。然后React通过比较旧的 Virtual DOM 树和更新后的 Virtual DOM 树来找到需要更改的元素。然后只更新浏览器DOM中已更改的元素。React 使用 DIFF 算法来比较两个虚拟DOM树，我们将在后面的部分中讨论。<br />![Real DOM and Virtual DOM](https://cdn.nlark.com/yuque/0/2023/png/241994/1694155382828-65d65194-d4a2-44da-8303-39c7a41cffcc.png#averageHue=%23fbfafa&clientId=u944a1cf4-6a39-4&from=paste&height=271&id=uc626e19c&originHeight=542&originWidth=1098&originalType=binary&ratio=2&rotation=0&showTitle=true&size=113275&status=done&style=none&taskId=u24541d35-f503-4e7d-b7d4-b5e0caf7e44&title=Real%20DOM%20and%20Virtual%20DOM&width=549 "Real DOM and Virtual DOM")<br />由于 React 为每个状态更改创建一个新的 UI , Virtual DOM 可以帮助 React 对新的 Virtual DOM 树进行更改不会立即触发回流和重新绘制，因为浏览器屏幕上没有绘制任何内容。<br />使用2棵 Virtual DOM 树的好处是，1棵树充当草稿和以后用于对真实DOM进行批量更新。旧的 Virtual DOM 树被称为 Current tree，另一个被称为 Work in Progress tree (因为它基本上被用作草稿)。在 [Dan Abramov 的Youtube 视频](https://www.youtube.com/watch?v=aS41Y_eyNrU)中，他解释了2个虚拟DOM树的动机来自于早期用于游戏开发的双重缓冲技术。<br />所以React首先会修改working in Progress Tree，然后更新 Real DOM。它比使用原生 JS 编写的网站做了更多的额外工作。但就性能而言，它仍然足够好。<br />你可以相关文章：<br />[How exactly is React’s Virtual DOM faster?](https://stackoverflow.com/questions/61245695/how-exactly-is-reacts-virtual-dom-faster/61272492?source=post_page-----cd33ceb0478e--------------------------------#61272492)<br />[Virtual DOM is pure overhead](https://svelte.dev/blog/virtual-dom-is-pure-overhead?source=post_page-----cd33ceb0478e--------------------------------)<br />我们使用 React 而不是原生 JS，因为它是声明式的，提供可重用组件，并有助于轻松构建复杂的UI，同时抽象掉困难的部分。 <br />另外，由于 Facebook、Netflix、Dropbox 等现代网站都是高度动态的，使用 Work in Progress tree 分批更新是有益的。<br />这就是为什么您可能已经注意到，如果您曾经做过类似下面示例的事情，setState()会批量更新，因为它是异步的。<br />![image.png](https://cdn.nlark.com/yuque/0/2023/png/241994/1694156072970-1e29ca0f-2eff-4aaf-a3e3-d0b9225a0738.png#averageHue=%2323262f&clientId=u944a1cf4-6a39-4&from=paste&height=644&id=u465b1b17&originHeight=860&originWidth=965&originalType=binary&ratio=2&rotation=0&showTitle=false&size=227502&status=done&style=none&taskId=u7771dabf-0089-4b58-8b04-320e6033ef2&title=&width=722.5)<br />你可以阅读相关文章：<br />[https://github.com/facebook/react/issues/11527#issuecomment-360199710](https://github.com/facebook/react/issues/11527#issuecomment-360199710)
+当我们在React应用程序中进行任何状态更改时，它会创建一个包含最新版本的整个 Virtual DOM 树。然后React通过比较旧的 Virtual DOM 树和更新后的 Virtual DOM 树来找到需要更改的元素。然后只更新浏览器DOM中已更改的元素。React 使用 DIFF 算法来比较两个虚拟DOM树，我们将在后面的部分中讨论。<br />
+
+![Real DOM and Virtual DOM](https://cdn.nlark.com/yuque/0/2023/png/241994/1694155382828-65d65194-d4a2-44da-8303-39c7a41cffcc.png#averageHue=%23fbfafa&clientId=u944a1cf4-6a39-4&from=paste&height=271&id=uc626e19c&originHeight=542&originWidth=1098&originalType=binary&ratio=2&rotation=0&showTitle=true&size=113275&status=done&style=none&taskId=u24541d35-f503-4e7d-b7d4-b5e0caf7e44&title=Real%20DOM%20and%20Virtual%20DOM&width=549 "Real DOM and Virtual DOM")
+
+<br />
+由于 React 为每个状态更改创建一个新的 UI , Virtual DOM 可以帮助 React 对新的 Virtual DOM 树进行更改不会立即触发回流和重新绘制，因为浏览器屏幕上没有绘制任何内容。<br />使用2棵 Virtual DOM 树的好处是，1棵树充当草稿和以后用于对真实DOM进行批量更新。旧的 Virtual DOM 树被称为 Current tree，另一个被称为 Work in Progress tree (因为它基本上被用作草稿)。在 [Dan Abramov 的Youtube 视频](https://www.youtube.com/watch?v=aS41Y_eyNrU) 中，他解释了2个虚拟DOM树的动机来自于早期用于游戏开发的双重缓冲技术。<br />所以React首先会修改working in Progress Tree，然后更新 Real DOM。它比使用原生 JS 编写的网站做了更多的额外工作。但就性能而言，它仍然足够好。
+
+<br />你可以相关文章：
+
+[How exactly is React’s Virtual DOM faster?](https://stackoverflow.com/questions/61245695/how-exactly-is-reacts-virtual-dom-faster/61272492?source=post_page-----cd33ceb0478e--------------------------------#61272492)
+
+[Virtual DOM is pure overhead](https://svelte.dev/blog/virtual-dom-is-pure-overhead?source=post_page-----cd33ceb0478e--------------------------------)
+
+<br />我们使用 React 而不是原生 JS，因为它是声明式的，提供可重用组件，并有助于轻松构建复杂的UI，同时抽象掉困难的部分。 <br />另外，由于 Facebook、Netflix、Dropbox 等现代网站都是高度动态的，使用 Work in Progress tree 分批更新是有益的。<br />这就是为什么您可能已经注意到，如果您曾经做过类似下面示例的事情，setState()会批量更新，因为它是异步的。<br />
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/241994/1694156072970-1e29ca0f-2eff-4aaf-a3e3-d0b9225a0738.png#averageHue=%2323262f&clientId=u944a1cf4-6a39-4&from=paste&height=644&id=u465b1b17&originHeight=860&originWidth=965&originalType=binary&ratio=2&rotation=0&showTitle=false&size=227502&status=done&style=none&taskId=u7771dabf-0089-4b58-8b04-320e6033ef2&title=&width=722.5)
+<br />你可以阅读相关文章：<br />
+
+[https://github.com/facebook/react/issues/11527#issuecomment-360199710](https://github.com/facebook/react/issues/11527#issuecomment-360199710)
 ## 重要的术语
 为了更好地理解，我们需要在讨论整个和解过程之前讨论一些术语。<br />**Reconciliation** 是通过像 **ReactDOM** 这样的库保持2个 DOM 树同步的过程。这是通过使用 Reconciler 和 **Renderer** 完成的。<br />**Reconciler** 使用 DIFF 算法来查找当前树(Current Tree)和进行中树(Work in Progress Tree)之间的差异，并将计算后的更改发送给Renderer。<br />**Renderer** 是用来更新应用UI的。不同的设备在共享相同的 **Reconciler** 时可以有不同的 **Renderer**。<br />在 React 16 之前，React 使用调用堆栈来跟踪程序的执行。因此，旧的 **reconciler** 被称为 **Stack Reconciler**。这种方式的问题是，它是同步的，如果大量的执行同时发生。这可能会导致动画帧数下降和糟糕的UI体验。它曾经只有一个虚拟 DOM 树，这使得一些功能，如 **Suspense** 和 **Concurrent Mode** 无法实现，因为它们依赖于 Reconciler 的异步工作能力。<br />在 React 16中，他们从新开始创建了一个新的 **Reconciler**，它使用了一种叫做 fiber 的新数据结构。因此它被称为**Fiber Reconciler**。其主要目的是通过在优先级的基础上执行工作，使协调器异步化和智能化。<br />React Fiber需要利用协同调度来实现异步，并且能够做到:
 
@@ -38,8 +60,8 @@ fiber 是一个Javascript对象，它代表一个工作单元。对于每个Reac
 :::info
 Priority List :<br />0 : No Work //No work is pending<br />1 : SynchronousPriority //For controlled text inputs. Synchronous side effects<br />2 : TaskPriority //Needs to complete at the end of the current tick<br />3 : AnimationPriority //Needs to complete before the next frame<br />4 : HighPriority //Interaction that needs to complete pretty soon to feel responsive<br />5 : LowPriority //Data fetching, or result from updating stores<br />6 : OffscreenPriority //Won't be visible but do the work in case it becomes visible
 :::
-# Reconciliation 过程
-浏览器的主线程是用来用React创建 Working In Progress树，处理用户事件，重绘等。<br />![During Phase 1](https://cdn.nlark.com/yuque/0/2023/png/241994/1694157210624-8417c4c9-058d-47db-9380-c99064fdf507.png#averageHue=%23fbfafa&clientId=u944a1cf4-6a39-4&from=paste&height=352&id=u6dbd51a5&originHeight=552&originWidth=1003&originalType=binary&ratio=2&rotation=0&showTitle=true&size=108901&status=done&style=none&taskId=u1ab40fc6-6539-4150-8c8e-d1f28eadbf0&title=During%20Phase%201&width=640.5 "During Phase 1")<br />让我们看看这一切是如何结合在一起的:
+# Reconciliation 过程 
+浏览器的主线程是用来用React创建 Working In Progress树，处理用户事件，重绘等。![During Phase 1](https://cdn.nlark.com/yuque/0/2023/png/241994/1694157210624-8417c4c9-058d-47db-9380-c99064fdf507.png#averageHue=%23fbfafa&clientId=u944a1cf4-6a39-4&from=paste&height=352&id=u6dbd51a5&originHeight=552&originWidth=1003&originalType=binary&ratio=2&rotation=0&showTitle=true&size=108901&status=done&style=none&taskId=u1ab40fc6-6539-4150-8c8e-d1f28eadbf0&title=During%20Phase%201&width=640.5 "During Phase 1")<br />让我们看看这一切是如何结合在一起的:
 
 1. 当我们对状态进行更改时，React等待主线程空闲，然后开始在其上构建一个 **Working In Progress **(WIP) 树。
 2. WIP 树是由 fiber 构建，树结构和代码中的组件结构是相匹配的。

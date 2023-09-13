@@ -5,10 +5,17 @@
 
 html,
 body {
+  margin: 0;
+  padding: 0;
   background-color: var(--main-bg-color);
+  color: #000;
 }
 
 header {
   background-color: var(--header-bg-color);
 }
 
+a {
+  text-decoration: none;
+  color: #000;
+}
