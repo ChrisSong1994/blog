@@ -5,10 +5,11 @@ const fs = require("fs-extra");
 const CP = require("child_process");
 const signale = require("signale");
 
-const MarkdownImageToBase64 = require("./mitb");
+const MarkdownImageToLocalPath = require("./MarkdownImageToLocalPath");
 
 const originalBlogsDir = path.join(__dirname, "../_posts/blogs");
 const convertedBlogsDir = path.join(__dirname, "../_posts/.blogs");
+
 
 fs.ensureDirSync(convertedBlogsDir);
 
@@ -25,7 +26,7 @@ async function run() {
     watcher
       .on("add", (filepath) => {
         const basename = path.basename(filepath);
-        const mitb = new MarkdownImageToBase64({
+        const mitb = new MarkdownImageToLocalPath({
           input: filepath,
           output: path.join(convertedBlogsDir, basename),
           filter: /.*cdn\.nlark\.com.*/,
@@ -38,7 +39,7 @@ async function run() {
           converterMap.get(filepath).run();
         } else {
           const basename = path.basename(filepath);
-          const mitb = new MarkdownImageToBase64({
+          const mitb = new MarkdownImageToLocalPath({
             input: filepath,
             output: path.join(convertedBlogsDir, basename),
             filter: /.*cdn\.nlark\.com.*/,
@@ -53,7 +54,7 @@ async function run() {
     for (const filepath of files) {
       const basename = path.basename(filepath);
       queue.push(
-        new MarkdownImageToBase64({
+        new MarkdownImageToLocalPath({
           input: path.join(originalBlogsDir, filepath),
           output: path.join(convertedBlogsDir, basename),
           filter: /.*cdn\.nlark\.com.*/,

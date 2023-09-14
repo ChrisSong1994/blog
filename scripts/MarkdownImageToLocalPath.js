@@ -2,8 +2,15 @@ const fetch = require("node-fetch");
 const signale = require("signale");
 const path = require("path");
 const fs = require("fs-extra");
+const crypto = require("crypto");
 
 const cwd = process.cwd();
+
+const imagesDir = path.join(__dirname, "../_posts/images"); //  存放图片到本地，构建的时候会同步到public
+const publicImagesDir = path.join(__dirname, "../public/images");
+
+fs.ensureDirSync(imagesDir);
+fs.ensureDirSync(publicImagesDir);
 
 /**
  * 获取 markdown 中的 image 标签
@@ -26,12 +33,18 @@ function parseMarkdownImagesUrls(input, filter) {
  *  @param {string} url
  *  @param {number} quality // 图片压缩比
  */
-async function imageUrlConvertToBase64(url) {
-  const ext = path.parse(new URL(url).pathname).ext 
+async function imageUrlConvertToLocalPath(url) {
+  const ext = path.parse(new URL(url).pathname).ext;
   const response = await fetch(url);
-  const result = await response.arrayBuffer();
-  const base64 = Buffer.from(result).toString("base64");
-  return `data:image/${ext.replace('.','')};base64,${base64}`;
+  const arrayBuffer = await response.arrayBuffer();
+  const buffer = new Uint8Array(arrayBuffer);
+  const hash = crypto.createHash("md5").update(buffer).digest("hex");
+  const filename = `${hash}${ext}`;
+  const filepath = path.join(imagesDir, filename);
+  fs.ensureFileSync(filepath);
+  await fs.writeFile(filepath, buffer);
+  fs.copyFileSync(filepath, path.join(publicImagesDir, filename));
+  return `../images/${filename}`;
 }
 
 /**
@@ -43,7 +56,7 @@ async function imageUrlConvertToBase64(url) {
  * * filter  正则匹配，默认匹配全部图片
  * 日志
  */
-class MarkdownImageToBase64 {
+class MarkdownImageToLocalPath {
   constructor(props) {
     const { input, output, quality = 1, filter } = props;
     this.imgUrlMap = new Map(); // url 和 base64 对应
@@ -76,7 +89,7 @@ class MarkdownImageToBase64 {
   async convert() {
     signale.pending("图片地址转换...");
     for (const url of this.imgUrlMap.keys()) {
-      const base64 = await imageUrlConvertToBase64(url, this.quality);
+      const base64 = await imageUrlConvertToLocalPath(url, this.quality);
       this.imgUrlMap.set(url, base64);
     }
   }
@@ -94,4 +107,4 @@ class MarkdownImageToBase64 {
   }
 }
 
-module.exports = MarkdownImageToBase64;
+module.exports = MarkdownImageToLocalPath;
