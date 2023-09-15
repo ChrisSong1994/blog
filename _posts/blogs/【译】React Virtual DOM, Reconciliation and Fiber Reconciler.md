@@ -36,18 +36,16 @@ Virtual DOM 是 DOM 作为 JavaScript 对象的表示。这是一个由JS库和�
 <br />
 由于 React 为每个状态更改创建一个新的 UI , Virtual DOM 可以帮助 React 对新的 Virtual DOM 树进行更改不会立即触发回流和重新绘制，因为浏览器屏幕上没有绘制任何内容。<br />使用2棵 Virtual DOM 树的好处是，1棵树充当草稿和以后用于对真实DOM进行批量更新。旧的 Virtual DOM 树被称为 Current tree，另一个被称为 Work in Progress tree (因为它基本上被用作草稿)。在 [Dan Abramov 的Youtube 视频](https://www.youtube.com/watch?v=aS41Y_eyNrU) 中，他解释了2个虚拟DOM树的动机来自于早期用于游戏开发的双重缓冲技术。<br />所以React首先会修改working in Progress Tree，然后更新 Real DOM。它比使用原生 JS 编写的网站做了更多的额外工作。但就性能而言，它仍然足够好。
 
-<br />你可以相关文章：
-
-[How exactly is React’s Virtual DOM faster?](https://stackoverflow.com/questions/61245695/how-exactly-is-reacts-virtual-dom-faster/61272492?source=post_page-----cd33ceb0478e--------------------------------#61272492)
-
-[Virtual DOM is pure overhead](https://svelte.dev/blog/virtual-dom-is-pure-overhead?source=post_page-----cd33ceb0478e--------------------------------)
+你可以相关文章：
+- [How exactly is React’s Virtual DOM faster?](https://stackoverflow.com/questions/61245695/how-exactly-is-reacts-virtual-dom-faster/61272492?source=post_page-----cd33ceb0478e--------------------------------#61272492)
+- [Virtual DOM is pure overhead](https://svelte.dev/blog/virtual-dom-is-pure-overhead?source=post_page-----cd33ceb0478e--------------------------------)
 
 <br />我们使用 React 而不是原生 JS，因为它是声明式的，提供可重用组件，并有助于轻松构建复杂的UI，同时抽象掉困难的部分。 <br />另外，由于 Facebook、Netflix、Dropbox 等现代网站都是高度动态的，使用 Work in Progress tree 分批更新是有益的。<br />这就是为什么您可能已经注意到，如果您曾经做过类似下面示例的事情，setState()会批量更新，因为它是异步的。<br />
 
 ![image.png](https://cdn.nlark.com/yuque/0/2023/png/241994/1694156072970-1e29ca0f-2eff-4aaf-a3e3-d0b9225a0738.png#averageHue=%2323262f&clientId=u944a1cf4-6a39-4&from=paste&height=644&id=u465b1b17&originHeight=860&originWidth=965&originalType=binary&ratio=2&rotation=0&showTitle=false&size=227502&status=done&style=none&taskId=u7771dabf-0089-4b58-8b04-320e6033ef2&title=&width=722.5)
-<br />你可以阅读相关文章：<br />
 
-[https://github.com/facebook/react/issues/11527#issuecomment-360199710](https://github.com/facebook/react/issues/11527#issuecomment-360199710)
+你可以阅读相关文章：
+- [https://github.com/facebook/react/issues/11527#issuecomment-360199710](https://github.com/facebook/react/issues/11527#issuecomment-360199710)
 ## 重要的术语
 为了更好地理解，我们需要在讨论整个和解过程之前讨论一些术语。<br />**Reconciliation** 是通过像 **ReactDOM** 这样的库保持2个 DOM 树同步的过程。这是通过使用 Reconciler 和 **Renderer** 完成的。<br />**Reconciler** 使用 DIFF 算法来查找当前树(Current Tree)和进行中树(Work in Progress Tree)之间的差异，并将计算后的更改发送给Renderer。<br />**Renderer** 是用来更新应用UI的。不同的设备在共享相同的 **Reconciler** 时可以有不同的 **Renderer**。<br />在 React 16 之前，React 使用调用堆栈来跟踪程序的执行。因此，旧的 **reconciler** 被称为 **Stack Reconciler**。这种方式的问题是，它是同步的，如果大量的执行同时发生。这可能会导致动画帧数下降和糟糕的UI体验。它曾经只有一个虚拟 DOM 树，这使得一些功能，如 **Suspense** 和 **Concurrent Mode** 无法实现，因为它们依赖于 Reconciler 的异步工作能力。<br />在 React 16中，他们从新开始创建了一个新的 **Reconciler**，它使用了一种叫做 fiber 的新数据结构。因此它被称为**Fiber Reconciler**。其主要目的是通过在优先级的基础上执行工作，使协调器异步化和智能化。<br />React Fiber需要利用协同调度来实现异步，并且能够做到:
 
@@ -57,9 +55,15 @@ Virtual DOM 是 DOM 作为 JavaScript 对象的表示。这是一个由JS库和�
 4. 如果不再需要，就中止工作
 
 fiber 是一个Javascript对象，它代表一个工作单元。对于每个React组件和元素，React 都创建自己的fiber object。它与实例有一对一的关系，并管理实例的工作。并且还跟踪它与 Virtual DOM 树中其他fiber object 的关系。<br />优先级列表:React Fiber为不同的更新赋予不同的重要性，并根据它们的优先级执行它们。
-:::info
-Priority List :<br />0 : No Work //No work is pending<br />1 : SynchronousPriority //For controlled text inputs. Synchronous side effects<br />2 : TaskPriority //Needs to complete at the end of the current tick<br />3 : AnimationPriority //Needs to complete before the next frame<br />4 : HighPriority //Interaction that needs to complete pretty soon to feel responsive<br />5 : LowPriority //Data fetching, or result from updating stores<br />6 : OffscreenPriority //Won't be visible but do the work in case it becomes visible
-:::
+
+Priority List :
+- 0 : No Work //No work is pending
+- 1 : SynchronousPriority //For controlled text inputs. Synchronous side effects
+- 2 : TaskPriority //Needs to complete at the end of the current tick
+- 3 : AnimationPriority //Needs to complete before the next frame
+- 4 : HighPriority //Interaction that needs to complete pretty soon to feel responsive
+- 5 : LowPriority //Data fetching, or result from updating stores
+- 6 : OffscreenPriority //Won't be visible but do the work in case it becomes visible
 # Reconciliation 过程 
 浏览器的主线程是用来用React创建 Working In Progress树，处理用户事件，重绘等。![During Phase 1](https://cdn.nlark.com/yuque/0/2023/png/241994/1694157210624-8417c4c9-058d-47db-9380-c99064fdf507.png#averageHue=%23fbfafa&clientId=u944a1cf4-6a39-4&from=paste&height=352&id=u6dbd51a5&originHeight=552&originWidth=1003&originalType=binary&ratio=2&rotation=0&showTitle=true&size=108901&status=done&style=none&taskId=u1ab40fc6-6539-4150-8c8e-d1f28eadbf0&title=During%20Phase%201&width=640.5 "During Phase 1")<br />让我们看看这一切是如何结合在一起的:
 

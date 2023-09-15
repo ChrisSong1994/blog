@@ -17,7 +17,7 @@ const Layout = ({ children }: Props) => {
           style={{
             paddingLeft: "2rem",
             paddingRight: "2rem",
-            boxSizing: 'border-box',
+            boxSizing: "border-box",
             justifyContent: "space-between",
             display: "flex",
             position: "fixed",
@@ -31,7 +31,7 @@ const Layout = ({ children }: Props) => {
               fontWeight: 700,
               fontSize: "2.25rem",
               padding: "1rem 0",
-              margin:0
+              margin: 0,
             }}
           >
             <Link href="/">ChrisSong Blog</Link>
@@ -41,17 +41,12 @@ const Layout = ({ children }: Props) => {
               display: "flex",
               justifyContent: "space-around",
               alignItems: "center",
-              width: "20rem",
+              width: "14rem",
             }}
           >
             <Link href="/">首页</Link>
-            <Link href="/archives">归档</Link>
             <Link href="/about">关于</Link>
-            <Link
-              href="https://github.com/ChrisSong1994"
-              target="__blank"
-              
-            >
+            <Link href="https://github.com/ChrisSong1994" target="__blank">
               <svg
                 height="28"
                 aria-hidden="true"

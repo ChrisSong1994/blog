@@ -6,7 +6,7 @@ type Props = {
 
 export default function TagsDisplay({ data = [] }: Props) {
   return (
-    <span className="px-2">
+    <span style={{padding:'0 12'}}>
       {data.map((tag) => {
         return (
           <Link

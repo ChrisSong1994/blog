@@ -3,7 +3,6 @@ import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 
 const TagsDisplay = dynamic(() => import("../components/tags-display"), {
-  // 仅client 渲染
   ssr: false,
 });
 import Layout from "components/layout";
@@ -39,7 +38,7 @@ export default function Index({ posts }: Props) {
                       style={{
                         fontWeight: 700,
                         fontSize: "1.5rem",
-                        margin:0,
+                        margin: 0,
                         marginBottom: "0.5rem",
                       }}
                     >
@@ -47,7 +46,7 @@ export default function Index({ posts }: Props) {
                     </h3>
                     <p
                       style={{
-                        color: "#BFBFBF",
+                        color: "#8c8c8c",
                         marginBottom: "0.5rem",
                       }}
                     >
