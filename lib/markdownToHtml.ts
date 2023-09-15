@@ -25,7 +25,7 @@ export default async function markdownToHtml(value: string) {
         codeContent = md.utils.escapeHtml(str);
       }
 
-      return `<pre class="hljs"><code> ${codeContent} </code></pre>`;
+      return `<pre class="hljs"><code>${codeContent}</code></pre>`;
     },
   });
   md.use(MarkdownItEmoji);
