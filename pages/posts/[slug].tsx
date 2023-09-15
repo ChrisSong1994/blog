@@ -34,6 +34,7 @@ export default function Post({ post }: Props) {
           style={{
             backgroundColor: "#fff",
             padding: "1rem",
+            wordBreak: "break-all",
           }}
         >
           <h1
