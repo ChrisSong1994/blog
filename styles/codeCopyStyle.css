@@ -11,7 +11,7 @@ pre {
     top: 3px;
     right: calc(100% + 4px);
     font-family: system-ui;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 18px;
     color: #666;
     opacity: 0.3;
@@ -26,7 +26,7 @@ pre {
     border-radius: 3px;
     background: none;
     font-family: system-ui;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 18px;
     color: #666;
     opacity: 0.3;
@@ -44,7 +44,7 @@ pre {
     border-radius: 3px;
     background: none;
     font-family: system-ui;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 18px;
     color: #666;
     opacity: 0.3;

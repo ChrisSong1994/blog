@@ -23,6 +23,7 @@ const Layout = ({ children }: Props) => {
             position: "fixed",
             top: 0,
             width: "100%",
+            zIndex: 100,
           }}
           className="blog-header"
         >
