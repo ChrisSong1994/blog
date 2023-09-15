@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import ErrorPage from "next/error";
 import Head from "next/head";
-import "highlight.js/styles/github.css";
+import "highlight.js/styles/atom-one-light.css";
 
 import Layout from "components/layout";
 import { getPostBySlug, getAllPosts } from "lib/api";
