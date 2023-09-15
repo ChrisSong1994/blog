@@ -80,7 +80,7 @@ const Layout = ({ children }: Props) => {
             paddingBottom: "0.5rem",
           }}
         >
-          Copyright © 2023 ChrisSong
+          Copyright © {new Date().getFullYear()} ChrisSong
         </footer>
       </section>
     </>

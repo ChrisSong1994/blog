@@ -6,6 +6,7 @@ import MarkdownItDeflist from "markdown-it-deflist";
 import MarkdownItFootnote from "markdown-it-footnote";
 import MarkdownItSub from "markdown-it-sub";
 import MarkdownItSup from "markdown-it-sup";
+import MarkdownItCopy from "markdown-it-copy";
 
 import hljs from "highlight.js";
 
@@ -35,6 +36,9 @@ export default async function markdownToHtml(value: string) {
   md.use(MarkdownItFootnote);
   md.use(MarkdownItSub);
   md.use(MarkdownItSup);
+  md.use(MarkdownItCopy, {
+    showCodeLanguage: true,
+  });
   md.linkify.set({ fuzzyEmail: false });
   return md.render(value);
 }
