@@ -1,6 +1,6 @@
 ---
 title: "【译】React Virtual DOM, Reconciliation and Fiber Reconciler"
-date: "2020-09-08"
+date: "2023-10-23"
 excerpt: 这片文章，我们将讨论下 React Virtual DOM  和 Reconciliation 的工作原理 
 tags: ["React"]
 ---
