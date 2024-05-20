@@ -1,6 +1,6 @@
 ---
 title: "Mac/Linux查看内网ip与访问公网的ip地址"
-date: "2022-09-08"
+date: "2024-03-08"
 excerpt: 查看内网ip与访问公网的ip地址
 tags: ["linux","mac","工具"]
 ---
