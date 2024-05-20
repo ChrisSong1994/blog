@@ -77,8 +77,8 @@ const Layout = ({ children }: Props) => {
           className="blog-footer"
           style={{
             textAlign: "center",
-            paddingTop: "0.5rem",
-            paddingBottom: "0.5rem",
+            paddingTop: "1.5rem",
+            paddingBottom: "1.5rem",
           }}
         >
           Copyright © {new Date().getFullYear()} ChrisSong
