@@ -21,7 +21,7 @@ export default function About() {
         </p>
         <ul className="list-disc">
           <li>
-            <a href="https://www.91ape.net" target="__blank">
+            <a href="https://www.apecv.com" target="__blank">
               🦍 猿简历
             </a>
             : 简历制作工具，所见即所得的编辑体验；
