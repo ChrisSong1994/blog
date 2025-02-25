@@ -1,10 +1,11 @@
 ---
 title: "如何使用阿里云DDNS Open API 更新动态域名解析记录"
 date: "2024-04-21"
-categories: ["nodejs",'network']
-top_img: /images/cover/posts/DDNS.jpg
+categories: 
+  - network 
+cover: /images/cover/posts/DDNS.jpg
 excerpt: 如何使用阿里云DDNS Open API 更新动态域名解析记录
-tags: ["nodejs","dns","docker"]
+tags: ["nodejs","network","dns","docker"]
 ---
 
 最近一段时间我的腾讯云买的域名到期了，正好我也买了一个阿里云的服务器，所以想着域名也一起在阿里云买得了，于是乎我就像之前一样买好域名后开始配置 DNS 解析，本来想着也没啥区别，但是配着配着我才发现腾讯云是提供免费的 ddns 解析服务的，而阿里云没有，只提供了 [ 实现动态域名解析DDNS Open Api ](https://next.api.aliyun.com/api-tools/demo/Alidns/7a52d9f9-59b0-43bd-96fc-8d475220f56f)，没办法，家里的一些服务器和 nas 需要远程访问的话没有域名很麻烦，公网ip又会动态变化，于是想还是使用 `Open Api`自己动手搞定吧。
