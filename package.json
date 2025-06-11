@@ -7,7 +7,7 @@
     "build": "hexo clean &&  hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
-    "docker:build": "docker buildx build --platform linux/amd64,linux/arm64 . --no-cache -t chrissong1994/blog:latest --push"
+    "docker:build": "docker  build  . --no-cache -t chrissong1994/blog:latest "
   },
   "hexo": {
     "version": "7.3.0"
