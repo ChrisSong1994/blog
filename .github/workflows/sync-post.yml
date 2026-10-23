@@ -1,0 +1,75 @@
+name: Sync Post
+
+# 在 GitHub 上新建 / 编辑 Issue 后，自动同步成博客文章并提交回仓库。
+# 触发事件见 https://docs.github.com/cn/developers/webhooks-and-events/events/issue-event-types
+on:
+  issues:
+    types:
+      - opened
+      - closed
+      - edited
+      - renamed
+      - labeled
+      - unlabeled
+      - reopened
+  # 也可以在 Actions 页面手动跑一次，做全量同步
+  workflow_dispatch:
+  # 想每天定时兜底同步的话，取消下面两行注释
+  # schedule:
+  #   - cron: '30 1 * * *'
+
+# 同一个 Issue 连续触发多个事件（比如同时打标签 + 编辑）时，
+# 只保留最后一次运行，避免并发写文件互相覆盖。
+concurrency:
+  group: sync-post-${{ github.event.issue.number || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  GH_USER: ${{ secrets.GH_USER }}
+  GH_PROJECT_NAME: ${{ secrets.GH_PROJECT_NAME }}
+  GH_CREATORS: ${{ secrets.GH_CREATORS }}
+
+jobs:
+  Publish:
+    # Issue 也可能属于 PR 的评论事件，PR 不参与同步
+    if: ${{ github.event_name != 'issues' || !github.event.issue.pull_request }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Install pnpm 📦
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js 🚀
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Git config 🔧
+        run: |
+          git config --global user.name "${{ secrets.GH_USER }}"
+          git config --global user.email "${{ secrets.GH_USER }}@users.noreply.github.com"
+
+      - name: Install dependencies 🔧
+        run: pnpm install --frozen-lockfile
+
+      # sync-post 只读 Issues，写文件到 data/blog/，不需要通过 env.mjs 的构建期校验
+      - name: Sync issues to mdx ⛏️
+        run: pnpm run sync-post
+
+      - name: Commit and push 📤
+        run: |
+          git add data/blog
+          # 没有变化时 git commit 会返回非 0，这里自行判断，避免整条流水线失败
+          if git diff --cached --quiet; then
+            echo "没有需要同步的文章"
+            exit 0
+          fi
+          git commit -m 'chore(ci): blog sync'
+          git pull --rebase origin ${GITHUB_REF_NAME}
+          git push
