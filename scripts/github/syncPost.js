@@ -10,7 +10,8 @@ const path = require('node:path');
 
 const { GH_TOKEN, GH_USER, GH_PROJECT_NAME, GH_CREATORS } = process.env;
 
-const blogOutputPath = path.resolve(__dirname, '..', 'data', 'blog');
+// 本文件在 scripts/github/ 下，要往上两级才到仓库根目录
+const blogOutputPath = path.resolve(__dirname, '..', '..', 'data', 'blog');
 
 if (!GH_USER || !GH_PROJECT_NAME) {
 	console.error(
@@ -66,10 +67,24 @@ ${normalizeHtml(String(body ?? ''))}
 }
 
 async function syncByCreator(creator, issueInstance) {
-	const { data } = await issueInstance.listIssues({ creator, state: 'all' });
+	// 只有 open 的 Issue 才是博文：关掉 Issue 就等于下线这篇文章
+	//（main() 开头会清掉上一轮的 post-*.mdx，这里不写就自然被删掉了）。
+	const { data } = await issueInstance.listIssues({ creator, state: 'open' });
+
+	// 再兜一层，避免接口 / 缓存里混进不该同步的条目：
+	// - pull_request：GitHub 的 /issues 接口会把 PR 也当成 issue 返回
+	// - state !== 'open'：已关闭的 Issue
+	const issues = data.filter(
+		(item) => !item.pull_request && item.state === 'open'
+	);
+	const skippedPr = data.filter((item) => item.pull_request).length;
+	const skippedClosed = data.filter(
+		(item) => !item.pull_request && item.state !== 'open'
+	).length;
+
 	let successCount = 0;
 
-	for (const item of data) {
+	for (const item of issues) {
 		try {
 			const fileName = `post-${item.number}`;
 			fs.writeFileSync(
@@ -82,11 +97,19 @@ async function syncByCreator(creator, issueInstance) {
 		}
 	}
 
-	if (successCount === data.length) {
-		console.log(`@${creator} 的文章全部同步成功，共 ${data.length} 篇`);
+	const skippedTips = [
+		skippedPr > 0 ? `跳过 ${skippedPr} 个 PR` : '',
+		skippedClosed > 0 ? `跳过 ${skippedClosed} 个已关闭的 Issue` : ''
+	].filter(Boolean);
+	const skippedTip = skippedTips.length ? `，${skippedTips.join('，')}` : '';
+
+	if (successCount === issues.length) {
+		console.log(
+			`@${creator} 的文章全部同步成功，共 ${issues.length} 篇${skippedTip}`
+		);
 	} else {
 		console.log(
-			`@${creator} 的文章同步失败 ${data.length - successCount} 篇（共 ${data.length} 篇）`
+			`@${creator} 的文章同步失败 ${issues.length - successCount} 篇（共 ${issues.length} 篇）${skippedTip}`
 		);
 	}
 }

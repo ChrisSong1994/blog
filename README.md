@@ -143,6 +143,10 @@ pnpm start:static              # 本地预览 out/（http://localhost:3003）
 保存后 Actions 会自动跑，生成 `data/blog/post-<issue号>.mdx` 并提交回仓库，
 触发一次部署。编辑、打标签、关闭 Issue 都会重新同步。
 
+**只有 open 的 Issue 才会被同步成文章**：关闭 Issue 就等于下线这篇文章，
+下次同步时对应的 `post-<号>.mdx` 会被删除，重新打开又会恢复。
+Pull Request 不会被当作文章（GitHub 的 issues 接口也会返回 PR）。
+
 本地想手动跑一次：
 
 ```bash

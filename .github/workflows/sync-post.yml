@@ -6,12 +6,14 @@ on:
   issues:
     types:
       - opened
+      # 关闭 / 重新打开 Issue 对应文章的上下线，必须触发
       - closed
+      - reopened
       - edited
       - renamed
       - labeled
       - unlabeled
-      - reopened
+      - deleted
   # 也可以在 Actions 页面手动跑一次，做全量同步
   workflow_dispatch:
   # 想每天定时兜底同步的话，取消下面两行注释
