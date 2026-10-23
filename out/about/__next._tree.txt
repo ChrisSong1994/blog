@@ -1,7 +1,0 @@
-:HL["/_next/static/chunks/2kdrxh-mo6fh-.css","style"]
-:HL["/_next/static/media/a343f882a40d2cc9-s.p.1sj6eobyi31rd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-:HL["/_next/static/chunks/2q8h_5cacrg8m.css","style"]
-3:[["children",{"s":"__PAGE__","h":160}]]
-2:[["children",{"s":"about","h":96,"c":"$Q3"}]]
-1:[["children",{"s":"(app)","h":96,"c":"$Q2"}]]
-0:{"b":"HcdjrWMA_p4gtQS1ErF9Q","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
