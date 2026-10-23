@@ -47,14 +47,41 @@ function yamlString(value) {
 	return JSON.stringify(String(value ?? ''));
 }
 
-function generateMdx(issue, fileName) {
+/** 标题里不能进文件名的字符（含 Windows 限制），统一换成空格 */
+const ILLEGAL_FILENAME_CHARS = /[\\/:*?"<>|#%&{}$!'@+`~=;,\[\]]/g;
+
+/** 文件名里标题的最大长度：中文一个字占 3 字节，留够余量避免超过 255 字节上限 */
+const MAX_TITLE_LENGTH = 60;
+
+/**
+ * 文件名用 `<issue 号>-<标题>`，例如 `8-雨雀文档不能做图床的问题需要解决.mdx`。
+ * 序号在前有两个好处：目录里按 Issue 顺序排列，且天然不会重名。
+ * 标题被清空时退回到 `post-<号>`，避免出现 `8-.mdx` 这种名字。
+ */
+function fileNameFor(issue) {
+	const safeTitle = String(issue.title ?? '')
+		.replace(ILLEGAL_FILENAME_CHARS, ' ')
+		.replace(/\s+/g, ' ')
+		.trim()
+		.slice(0, MAX_TITLE_LENGTH)
+		.replace(/[.\s]+$/, '')
+		.trim();
+
+	return safeTitle ? `${issue.number}-${safeTitle}` : `post-${issue.number}`;
+}
+
+/** 生成文件末尾的固定尾注，兼作「这个文件是脚本生成的」标记 */
+const AUTO_PUBLISH_MARKER = '此文自动发布于：';
+
+function generateMdx(issue) {
 	const { title, labels, created_at, body, html_url, user } = issue;
 	const tags = labels.map((item) => item.name);
 
 	return `---
 title: ${yamlString(title.trim())}
 date: ${created_at}
-slug: ${fileName}
+# URL 固定用 post-<号>，改标题不会让已发布的链接失效
+slug: post-${issue.number}
 author: ${yamlString(`${user?.login ?? ''}：${user?.html_url ?? ''}`)}
 tags: ${JSON.stringify(tags)}
 ---
@@ -62,13 +89,13 @@ tags: ${JSON.stringify(tags)}
 ${normalizeHtml(String(body ?? ''))}
 
 ---
-此文自动发布于：<a href="${html_url}" target="_blank">github issues</a>
+${AUTO_PUBLISH_MARKER}<a href="${html_url}" target="_blank">github issues</a>
 `;
 }
 
 async function syncByCreator(creator, issueInstance) {
 	// 只有 open 的 Issue 才是博文：关掉 Issue 就等于下线这篇文章
-	//（main() 开头会清掉上一轮的 post-*.mdx，这里不写就自然被删掉了）。
+	//（main() 开头会清掉上一轮同步生成的文件，这里不写就自然被删掉了）。
 	const { data } = await issueInstance.listIssues({ creator, state: 'open' });
 
 	// 再兜一层，避免接口 / 缓存里混进不该同步的条目：
@@ -86,10 +113,10 @@ async function syncByCreator(creator, issueInstance) {
 
 	for (const item of issues) {
 		try {
-			const fileName = `post-${item.number}`;
+			const fileName = fileNameFor(item);
 			fs.writeFileSync(
 				path.join(blogOutputPath, `${fileName}.mdx`),
-				generateMdx(item, fileName)
+				generateMdx(item)
 			);
 			successCount++;
 		} catch (error) {
@@ -117,10 +144,16 @@ async function syncByCreator(creator, issueInstance) {
 async function main() {
 	fs.mkdirSync(blogOutputPath, { recursive: true });
 
-	// 只清掉上次同步生成的文件，手工放进 data/blog 的文件不会被删掉
+	// 只清掉上次同步生成的文件，手工放进 data/blog 的文件不会被删掉。
+	// 判断依据有两条：文件名像 `<号>-<标题>.mdx`（旧命名 `post-<号>.mdx` 兼容），
+	// 且正文里带着本脚本写入的固定尾注 —— 光看文件名容易误删手写文章。
 	for (const file of fs.readdirSync(blogOutputPath)) {
-		if (/^post-\d+\.mdx$/.test(file)) {
-			fs.rmSync(path.join(blogOutputPath, file));
+		if (!/^(post-\d+|\d+-.+)\.mdx$/.test(file)) continue;
+
+		const filePath = path.join(blogOutputPath, file);
+		const content = fs.readFileSync(filePath, 'utf8');
+		if (content.includes(AUTO_PUBLISH_MARKER)) {
+			fs.rmSync(filePath);
 		}
 	}
 
