@@ -1,3 +1,4 @@
+import { withBasePath } from '@/lib/base-path';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import Link, { type LinkProps } from 'next/link';
@@ -9,8 +10,9 @@ type ComponentProps<P = object> = PropsWithChildren<
 	} & P
 >;
 
-const LOGO_SRC = '/logo.png';
-const LOGO_ALT_SRC = '/logo-alt.png';
+// next/image 不会自动补 basePath
+const LOGO_SRC = withBasePath('/logo.png');
+const LOGO_ALT_SRC = withBasePath('/logo-alt.png');
 
 function AvatarContainer({ className, ...props }: ComponentProps) {
 	return (

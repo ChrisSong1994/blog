@@ -1,6 +1,7 @@
 import BaiDuAnalytics from '@/components/BaiDuAnalytics';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import siteMetadata from '@/config/site';
+import { withBasePath } from '@/lib/base-path';
 import { constructSiteUrl } from '@/lib';
 import { sansFont } from '@/lib/font';
 import { type Viewport, type Metadata } from 'next';
@@ -15,13 +16,17 @@ export const metadata: Metadata = {
 	},
 	description: siteMetadata.description,
 	keywords: siteMetadata.keywords,
-	manifest: '/site.webmanifest',
+	// metadata 里的路径不会自动补 basePath，子路径部署时必须手动加
+	manifest: withBasePath('/site.webmanifest'),
 	openGraph: siteMetadata.openGraph,
 	twitter: siteMetadata.twitter,
 	alternates: {
 		canonical: constructSiteUrl('/').href,
 		types: {
-			'application/rss+xml': [{ url: 'feed.xml', title: 'RSS 订阅' }]
+			// 用绝对地址：metadataBase 指向带子路径的站点根，相对路径会被再拼一次前缀
+			'application/rss+xml': [
+				{ url: constructSiteUrl('/feed.xml').href, title: 'RSS 订阅' }
+			]
 		}
 	},
 	other: {

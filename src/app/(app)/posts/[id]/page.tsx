@@ -3,6 +3,7 @@ import { Container } from '@/components/Container';
 import MDXComponents from '@/components/MDXComponents';
 import { Separator } from '@/components/ui/separator';
 import siteMetadata from '@/config/site';
+import { withBasePath } from '@/lib/base-path';
 import {
 	getAdjacentPosts,
 	getPostBySlug,
@@ -126,7 +127,7 @@ export default async function Page({
 								{post.cover && (
 									<div className="relative mb-8 aspect-video overflow-hidden rounded-md bg-muted">
 										<Image
-											src={post.cover}
+											src={withBasePath(post.cover)}
 											alt={post.title}
 											fill
 											unoptimized

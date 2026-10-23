@@ -1,6 +1,7 @@
 'use client';
 
 import { ClientOnly } from '@/components/ClientOnly';
+import { withBasePath } from '@/lib/base-path';
 import Image from 'next/image';
 import React from 'react';
 import Zoom from 'react-medium-image-zoom';
@@ -28,7 +29,7 @@ const ZoomAbleImage: React.FC<ZoomAbleImageProps> = ({
 			<Zoom>
 				<Image
 					unoptimized
-					src={src}
+					src={withBasePath(src)}
 					alt={alt}
 					width={width || 800}
 					height={height || 600}

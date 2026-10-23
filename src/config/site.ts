@@ -1,3 +1,4 @@
+import { withBasePath } from '@/lib/base-path';
 import type { SiteConfig } from '@/types/siteConfig';
 // 站点名称 / 简介 / 作者这些「构建脚本也要读」的字段放在 site.config.json，
 // 这样 scripts/generate-rss.js 能直接 require 同一份，不会出现两处写法不一致。
@@ -17,8 +18,9 @@ export const baseSiteConfig: SiteConfig = {
 	name: sharedSiteConfig.name, // TODO: site.config.json
 	description: sharedSiteConfig.description, // TODO: site.config.json
 	url: url.href,
-	// 网站预览图（放在 public/ 下）
-	ogImage: url.origin + '/og.png',
+	// 网站预览图（放在 public/ 下）。metadata 里的图片路径不会自动补 basePath，
+	// 这里统一拼成绝对地址，顺带避免 `${url}og.png` 在 url 没有结尾斜杠时拼错。
+	ogImage: new URL(withBasePath('/og.png'), url.origin).href,
 	metadataBase: '/',
 	keywords: ['blog', '前端', '开发者', '编程', '学习笔记', '程序员'], // TODO
 	authors: sharedSiteConfig.authors, // TODO：英文名 / 昵称，用于版权与 metadata 模板
@@ -71,9 +73,9 @@ export const baseSiteConfig: SiteConfig = {
 	],
 	defaultNextTheme: 'system', // next-themes 选项：system | dark | light
 	icons: {
-		icon: '/favicon.ico',
-		shortcut: '/logo.png',
-		apple: '/logo.png'
+		icon: withBasePath('/favicon.ico'),
+		shortcut: withBasePath('/logo.png'),
+		apple: withBasePath('/logo.png')
 	},
 	// 留空则不渲染页脚的备案信息
 	beian: '', // TODO，例如：浙ICP备2021039023号-3
@@ -108,13 +110,13 @@ const siteMetadata: SiteConfig = {
 		title: baseSiteConfig.authors + baseSiteConfig.name,
 		description: baseSiteConfig.description,
 		siteName: baseSiteConfig.name,
-		images: [`${baseSiteConfig.url}og.png`]
+		images: [baseSiteConfig.ogImage]
 	},
 	twitter: {
 		card: 'summary_large_image',
 		title: baseSiteConfig.authors + baseSiteConfig.name,
 		description: baseSiteConfig.description,
-		images: [`${baseSiteConfig.url}og.png`],
+		images: [baseSiteConfig.ogImage],
 		creator: '' // TODO
 	}
 };

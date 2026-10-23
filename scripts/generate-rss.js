@@ -14,6 +14,9 @@ const { slugFromFileName } = require('./lib/slug');
 const siteConfig = require('../site.config.json');
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url;
+// 站点挂在子路径下时（GitHub Pages 的 /blog），`new URL('/posts', SITE_URL)` 会跳到
+// 域名根，所以把站点 URL 当成目录，用相对路径拼，才能保留子路径。
+const SITE_BASE = SITE_URL.endsWith('/') ? SITE_URL : `${SITE_URL}/`;
 const FEED_PATH = path.join(__dirname, '..', 'public', 'feed.xml');
 
 /** about 之类的静态页不进 RSS */
@@ -46,7 +49,7 @@ async function generate() {
 		title: siteConfig.name,
 		description: siteConfig.description,
 		site_url: SITE_URL,
-		feed_url: new URL('/feed.xml', SITE_URL).href,
+		feed_url: new URL('feed.xml', SITE_BASE).href,
 		language: siteConfig.locale
 	});
 
@@ -68,7 +71,7 @@ async function generate() {
 				return {
 					title: frontmatter.title,
 					description: frontmatter.description ?? frontmatter.title,
-					url: new URL(`/posts/${slug}`, SITE_URL).href,
+					url: new URL(`posts/${slug}`, SITE_BASE).href,
 					date: new Date(frontmatter.date),
 					categories: frontmatter.tags ?? []
 				};

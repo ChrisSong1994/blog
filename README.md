@@ -253,8 +253,13 @@ posts/
 仓库已带 `.github/workflows/deploy.yml`：
 
 1. Settings → Pages → Source 选 **GitHub Actions**
-2. Settings → Secrets and variables → Actions → **Variables** 里加
-   `NEXT_PUBLIC_SITE_URL`（值是你的 Pages 地址）
+2. `deploy.yml` 的 Build 步骤里配好 `NEXT_PUBLIC_SITE_URL`（你的 Pages 地址），
+   以及 `NEXT_PUBLIC_BASE_PATH`（项目站点的子路径，比如 `/blog`）
+
+项目站点的地址形如 `https://<用户名>.github.io/<仓库名>`，页面挂在子路径下，
+所以构建时的 `NEXT_PUBLIC_BASE_PATH` 必须一起配上，比如 `/blog`，否则
+`/_next/...`、`favicon.ico` 这些静态资源会按域名根去请求，全部 404。
+这两个值要指向同一个地址（用户站点 `<用户名>.github.io` 仓库则都留空）。
 
 不需要 Pages 的话直接删掉这个文件。
 

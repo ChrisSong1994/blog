@@ -1,5 +1,6 @@
 'use client';
 
+import { stripBasePath } from '@/lib/base-path';
 import { clamp } from '@/lib/math';
 import { cn } from '@/lib/utils';
 import {
@@ -20,7 +21,7 @@ import ThemeToggle from './ThemeToggle';
  * 全部靠 CSS 自定义属性驱动，滚动回调本身只写属性、不触发 React 渲染。
  */
 export function Header() {
-	const isHomePage = usePathname() === '/';
+	const isHomePage = stripBasePath(usePathname()) === '/';
 
 	const headerRef = React.useRef<HTMLDivElement>(null);
 	const avatarRef = React.useRef<HTMLDivElement>(null);

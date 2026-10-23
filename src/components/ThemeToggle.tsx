@@ -2,6 +2,7 @@
 
 import { Switch } from '@/components/ui/switch';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { withBasePath } from '@/lib/base-path';
 import 'client-only';
 import { Moon, Sun } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -33,9 +34,11 @@ export default function ThemeToggle() {
 	useEffect(() => {
 		const link = document.createElement('link');
 		link.rel = 'stylesheet';
-		link.href = isDarkMode
-			? '/style/prism-github-dark.css'
-			: '/style/prism-github-light.css';
+		link.href = withBasePath(
+			isDarkMode
+				? '/style/prism-github-dark.css'
+				: '/style/prism-github-light.css'
+		);
 		document.head.appendChild(link);
 
 		return () => {

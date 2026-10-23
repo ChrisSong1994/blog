@@ -1,4 +1,5 @@
 import siteMetadata from '@/config/site';
+import { asSiteBase } from '@/lib/base-path';
 import { type MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
@@ -10,7 +11,8 @@ export default function robots(): MetadataRoute.Robots {
 			{ userAgent: 'Baiduspider', allow: '/' },
 			{ userAgent: '*', allow: '/' }
 		],
-		sitemap: new URL('/sitemap.xml', siteMetadata.url).href,
+		// 站点在子路径下时，'/sitemap.xml' 会掉到域名根，必须按站点目录解析
+		sitemap: new URL('sitemap.xml', asSiteBase(siteMetadata.url)).href,
 		host: siteMetadata.url
 	};
 }

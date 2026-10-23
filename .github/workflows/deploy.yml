@@ -46,6 +46,8 @@ jobs:
       - name: Build ⛏️
         run: pnpm build
         env:
+          # 项目站点挂在 /blog 子路径下，静态资源必须跟着加前缀，否则全部 404
+          NEXT_PUBLIC_BASE_PATH: "/blog"
           NEXT_PUBLIC_SITE_URL: "https://chrissong1994.github.io/blog"
           NEXT_PUBLIC_SITE_EMAIL_FROM: "18557511748@163.com"
 

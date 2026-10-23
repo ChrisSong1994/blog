@@ -11,6 +11,7 @@ import {
 	TooltipTrigger
 } from '@/components/ui/tooltip';
 import { copyTextToClipboard } from '@/lib';
+import { withBasePath } from '@/lib/base-path';
 import { makeBlurDataURL } from '@/lib/images';
 import { AnimatePresence, motion } from 'motion/react';
 import Image from 'next/image';
@@ -62,7 +63,7 @@ const PictureDialog = ({
 			<DialogContent className="px-10 py-10 sm:max-w-[425px]">
 				<div className="relative h-auto w-34">
 					<Image
-						src={`/media/${href}.png`}
+						src={withBasePath(`/media/${href}.png`)}
 						alt={platform ?? siteMetadata.authorsCN}
 						width={430}
 						height={430}

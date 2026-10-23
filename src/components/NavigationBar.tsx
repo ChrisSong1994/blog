@@ -13,6 +13,7 @@ import {
 	PopoverTrigger
 } from '@/components/ui/popover';
 import siteMetadata from '@/config/site';
+import { stripBasePath } from '@/lib/base-path';
 import { cn } from '@/lib/utils';
 import { motion, useMotionTemplate, useMotionValue } from 'motion/react';
 import Link from 'next/link';
@@ -77,7 +78,7 @@ function NavItem({
 	const formatHref = (path: string) =>
 		moreHrefList.includes(path) ? '/more' : path;
 
-	const isActive = formatHref(pathname) === href;
+	const isActive = formatHref(stripBasePath(pathname)) === href;
 
 	return (
 		<li

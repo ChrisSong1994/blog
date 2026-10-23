@@ -1,5 +1,6 @@
 import { PeekabooLink } from '@/components/links/PeekabooLink';
 import siteMetadata from '@/config/site';
+import { withBasePath } from '@/lib/base-path';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -70,7 +71,7 @@ export function Footer() {
 						>
 							<Image
 								unoptimized
-								src={'/police.png'}
+								src={withBasePath('/police.png')}
 								width={18}
 								height={18}
 								alt="备案"
