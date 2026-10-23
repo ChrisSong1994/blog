@@ -1,0 +1,22 @@
+{
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit"
+	},
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+	"files.eol": "\n",
+	"files.associations": {
+		"*.css": "tailwindcss"
+	},
+	"tailwindCSS.experimental.classRegex": [
+		["cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*)[\"'`]"],
+		["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*)[\"'`]"]
+	],
+	"search.exclude": {
+		"**/.next": true,
+		"**/out": true,
+		"**/.content-collections": true
+	}
+}

@@ -1,0 +1,54 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# content-collections 构建产物（由 content-collections.ts 生成）
+/.content-collections/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files（.env.example 是模板，需要提交）
+.env*
+!.env.example
+
+# 本地 npm 镜像等机器相关配置，不跟仓库走
+.npmrc
+
+# 构建期由 scripts/generate-rss.js 生成
+/public/feed.xml
+
+# 构建期由 scripts/copy-post-images.js 从 posts/images/ 同步过来
+/public/posts/images/
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts

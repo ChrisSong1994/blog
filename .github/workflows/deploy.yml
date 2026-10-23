@@ -1,0 +1,63 @@
+name: Deploy to GitHub Pages
+
+# 把 out/ 发布到 GitHub Pages。
+# 用 Pages 部署时需要先在仓库 Settings → Pages 里把 Source 选成 "GitHub Actions"。
+# 如果你用 Vercel / Netlify 部署，直接删掉这个文件即可。
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一时间只跑一个部署，新的推送会取消排队中的旧任务
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Install pnpm 📦
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js 🚀
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Setup Pages 🔧
+        uses: actions/configure-pages@v5
+
+      - name: Install dependencies 🔧
+        run: pnpm install --frozen-lockfile
+
+      # 站点域名来自 NEXT_PUBLIC_SITE_URL，需要配置成仓库的 Actions 变量
+      - name: Build ⛏️
+        run: pnpm build
+        env:
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+
+      - name: Upload artifact 📤
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages 🚀
+        id: deployment
+        uses: actions/deploy-pages@v4
