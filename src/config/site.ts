@@ -5,9 +5,11 @@ import sharedSiteConfig from '~/site.config.json';
 
 // ★★★ 站点信息唯一入口：改这里 + site.config.json 就能完成整站换皮 ★★★
 // 带 `TODO` 的地方都是占位符，替换成你自己的信息即可。
+// 用 `||` 而不是 `??`：.env 里写成 NEXT_PUBLIC_SITE_URL="" 时拿到的是空串，
+// `??` 会当成「有值」直接传给 new URL()，抛 Invalid URL。
 const url = new URL(
 	process.env.NODE_ENV === 'production'
-		? (process.env.NEXT_PUBLIC_SITE_URL ?? sharedSiteConfig.url)
+		? process.env.NEXT_PUBLIC_SITE_URL || sharedSiteConfig.url
 		: 'http://localhost:3000'
 );
 

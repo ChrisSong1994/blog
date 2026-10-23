@@ -46,8 +46,8 @@ jobs:
       - name: Build ⛏️
         run: pnpm build
         env:
-          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
-          NEXT_PUBLIC_SITE_EMAIL_FROM: ${{ vars.NEXT_PUBLIC_SITE_EMAIL_FROM || 'noreply@example.com' }}
+          NEXT_PUBLIC_SITE_URL: "https://chrissong1994.github.io/blog"
+          NEXT_PUBLIC_SITE_EMAIL_FROM: "18557511748@163.com"
 
       - name: Upload artifact 📤
         uses: actions/upload-pages-artifact@v3
