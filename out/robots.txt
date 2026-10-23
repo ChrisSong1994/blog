@@ -1,0 +1,17 @@
+User-Agent: Googlebot
+Allow: /
+
+User-Agent: Applebot
+Allow: /
+
+User-Agent: bingbot
+Allow: /
+
+User-Agent: Baiduspider
+Allow: /
+
+User-Agent: *
+Allow: /
+
+Host: https://example.com/
+Sitemap: https://example.com/sitemap.xml

@@ -1,0 +1,9 @@
+{
+	"name": "blog | 前端 | 开发者",
+	"description": "这里是一段站点简介，会出现在首页、SEO 描述与 RSS 订阅里。",
+	"authors": "卷尺",
+	"authorsCN": "卷尺",
+	"email": "you@example.com",
+	"url": "https://example.com",
+	"locale": "zh-CN"
+}

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title><![CDATA[blog | 前端 | 开发者]]></title>
+        <description><![CDATA[这里是一段站点简介，会出现在首页、SEO 描述与 RSS 订阅里。]]></description>
+        <link>https://example.com</link>
+        <generator>RSS for Node</generator>
+        <lastBuildDate>Fri, 23 Oct 2026 04:17:53 GMT</lastBuildDate>
+        <atom:link href="https://example.com/feed.xml" rel="self" type="application/rss+xml"/>
+        <language><![CDATA[zh-CN]]></language>
+        <item>
+            <title><![CDATA[关于 WorkBuddy 对接线上 MCP 服务的一点思考]]></title>
+            <description><![CDATA[关于 WorkBuddy 对接线上 MCP 服务的一点思考]]></description>
+            <link>https://example.com/posts/WorkBuddy-mcp-thinking</link>
+            <guid isPermaLink="true">https://example.com/posts/WorkBuddy-mcp-thinking</guid>
+            <category><![CDATA[WorkBuddy]]></category>
+            <category><![CDATA[MCP]]></category>
+            <category><![CDATA[Agent]]></category>
+            <pubDate>Thu, 22 Oct 2026 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Nodejs 从 CJS 迁移到 ESM]]></title>
+            <description><![CDATA[随着 Nodejs 对于 ESM 的支持逐渐完善，目前很多三方库也逐渐仅支持 ESM 模式]]></description>
+            <link>https://example.com/posts/nodejs-cjs-to-esm</link>
+            <guid isPermaLink="true">https://example.com/posts/nodejs-cjs-to-esm</guid>
+            <category><![CDATA[Nodejs]]></category>
+            <category><![CDATA[cjs]]></category>
+            <category><![CDATA[esm]]></category>
+            <category><![CDATA[模块]]></category>
+            <pubDate>Tue, 26 Nov 2024 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[如何使用阿里云 DDNS Open API 更新动态域名解析记录]]></title>
+            <description><![CDATA[如何使用阿里云 DDNS Open API 更新动态域名解析记录]]></description>
+            <link>https://example.com/posts/aliyun-ddns-open-api</link>
+            <guid isPermaLink="true">https://example.com/posts/aliyun-ddns-open-api</guid>
+            <category><![CDATA[Nodejs]]></category>
+            <category><![CDATA[network]]></category>
+            <category><![CDATA[dns]]></category>
+            <category><![CDATA[docker]]></category>
+            <pubDate>Sun, 21 Apr 2024 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Mac/Linux 查看内网 ip 与访问公网的 ip 地址]]></title>
+            <description><![CDATA[查看内网 ip 与访问公网的 ip 地址]]></description>
+            <link>https://example.com/posts/mac-linux-ip-address</link>
+            <guid isPermaLink="true">https://example.com/posts/mac-linux-ip-address</guid>
+            <category><![CDATA[linux]]></category>
+            <category><![CDATA[mac]]></category>
+            <category><![CDATA[工具]]></category>
+            <pubDate>Fri, 08 Mar 2024 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[【译】React Virtual DOM, Reconciliation and Fiber Reconciler]]></title>
+            <description><![CDATA[这篇文章，我们将讨论下 React Virtual DOM 和 Reconciliation 的工作原理]]></description>
+            <link>https://example.com/posts/react-virtual-dom-reconciliation-fiber</link>
+            <guid isPermaLink="true">https://example.com/posts/react-virtual-dom-reconciliation-fiber</guid>
+            <category><![CDATA[React]]></category>
+            <pubDate>Mon, 23 Oct 2023 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[图片懒加载 IntersectionObserver]]></title>
+            <description><![CDATA[图片懒加载是一种性能优化手段，在很多以图文列表为主的场景使用较多，比如大部分的首页商品列表展示]]></description>
+            <link>https://example.com/posts/intersection-observer-lazy-load</link>
+            <guid isPermaLink="true">https://example.com/posts/intersection-observer-lazy-load</guid>
+            <category><![CDATA[性能优化]]></category>
+            <category><![CDATA[javascript]]></category>
+            <pubDate>Wed, 14 Jul 2021 00:00:00 GMT</pubDate>
+        </item>
+    </channel>
+</rss>

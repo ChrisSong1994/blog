@@ -1,0 +1,296 @@
+/**
+ * 文章正文的 GitHub Markdown 风格（明暗两套，用 CSS 变量切换）。
+ *
+ * 注意：这里所有规则都在 `@layer components` 里，而 `public/style/prism-*.css`
+ * 是运行时用 <link> 插进来的、不带任何 @layer，按 CSS 层叠层规则**未分层的样式
+ * 一定压过分层的**。所以代码块自身的底色 / 内边距 / 圆角由那两个 prism 主题文件
+ * 负责，这里只管行内 code 和正文排版。
+ */
+
+@layer components {
+	.markdown-body {
+		/* GitHub Primer 的明色 token */
+		--md-fg: #1f2328;
+		--md-fg-muted: #59636e;
+		--md-canvas-subtle: #f6f8fa;
+		--md-border: #d1d9e0;
+		--md-border-muted: #d1d9e0b3;
+		--md-accent: #0969da;
+		--md-danger-fg: #82071e;
+		--md-success-fg: #116329;
+		--md-code-bg: rgb(129 139 152 / 12%);
+
+		color: var(--md-fg);
+		line-height: 1.6;
+		word-wrap: break-word;
+	}
+
+	.dark .markdown-body {
+		--md-fg: #f0f6fc;
+		--md-fg-muted: #9198a1;
+		--md-canvas-subtle: #151b23;
+		--md-border: #3d444d;
+		--md-border-muted: #3d444db3;
+		--md-accent: #4493f8;
+		--md-danger-fg: #ffdcd7;
+		--md-success-fg: #aff5b4;
+		--md-code-bg: rgb(101 108 118 / 50%);
+	}
+
+	/* 首尾元素不留外边距，避免正文上下多出一截空白 */
+	.markdown-body > :first-child {
+		margin-top: 0;
+	}
+
+	.markdown-body > :last-child {
+		margin-bottom: 0;
+	}
+
+	.markdown-body p {
+		margin-top: 0;
+		margin-bottom: 1rem;
+	}
+
+	.markdown-body a {
+		color: var(--md-accent);
+		text-decoration: underline;
+		text-underline-offset: 0.2rem;
+	}
+
+	.markdown-body strong {
+		font-weight: 600;
+	}
+
+	.markdown-body del {
+		text-decoration: line-through;
+	}
+
+	/* ---------------- 标题 ---------------- */
+
+	.markdown-body h1,
+	.markdown-body h2,
+	.markdown-body h3,
+	.markdown-body h4,
+	.markdown-body h5,
+	.markdown-body h6 {
+		margin-top: 1.5rem;
+		margin-bottom: 1rem;
+		font-weight: 600;
+		line-height: 1.25;
+	}
+
+	.markdown-body h1 {
+		padding-bottom: 0.3em;
+		font-size: 2em;
+		border-bottom: 1px solid var(--md-border-muted);
+	}
+
+	.markdown-body h2 {
+		padding-bottom: 0.3em;
+		font-size: 1.5em;
+		border-bottom: 1px solid var(--md-border-muted);
+	}
+
+	.markdown-body h3 {
+		font-size: 1.25em;
+	}
+
+	.markdown-body h4 {
+		font-size: 1em;
+	}
+
+	.markdown-body h5 {
+		font-size: 0.875em;
+	}
+
+	.markdown-body h6 {
+		font-size: 0.85em;
+		color: var(--md-fg-muted);
+	}
+
+	/**
+	 * 标题锚点：rehype-autolink-headings 的 wrap 行为会把标题内容整个包进
+	 * `<a class="anchor">`，这里把链接样式还原成标题本身的样子（不要下划线），
+	 * hover 时在末尾补一个 `#` 作为可点击的暗示。
+	 */
+	.markdown-body :is(h1, h2, h3, h4, h5, h6) > .anchor {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.markdown-body .anchor:hover::after {
+		content: '#';
+		margin-left: 0.35rem;
+		font-weight: 400;
+		color: var(--md-accent);
+	}
+
+	/* ---------------- 列表 ---------------- */
+
+	.markdown-body ul,
+	.markdown-body ol {
+		margin-top: 0;
+		margin-bottom: 1rem;
+		padding-left: 2em;
+	}
+
+	.markdown-body ul {
+		list-style-type: disc;
+	}
+
+	.markdown-body ol {
+		list-style-type: decimal;
+	}
+
+	.markdown-body ul ul,
+	.markdown-body ul ol,
+	.markdown-body ol ol,
+	.markdown-body ol ul {
+		margin-top: 0.25rem;
+		margin-bottom: 0;
+	}
+
+	.markdown-body ul ul {
+		list-style-type: circle;
+	}
+
+	.markdown-body ul ul ul {
+		list-style-type: square;
+	}
+
+	.markdown-body li + li {
+		margin-top: 0.25em;
+	}
+
+	.markdown-body li > p {
+		margin-bottom: 0.5rem;
+	}
+
+	/* GFM 任务列表：checkbox 顶到项目符号的位置 */
+	.markdown-body li:has(> input[type='checkbox']) {
+		list-style: none;
+	}
+
+	.markdown-body li > input[type='checkbox'] {
+		margin: 0 0.2em 0.25em -1.4em;
+		vertical-align: middle;
+	}
+
+	.markdown-body dt {
+		font-weight: 600;
+	}
+
+	.markdown-body dd {
+		margin-left: 0;
+	}
+
+	/* ---------------- 引用 ---------------- */
+
+	.markdown-body blockquote {
+		margin: 0 0 1rem;
+		padding: 0 1em;
+		color: var(--md-fg-muted);
+		border-left: 0.25em solid var(--md-border);
+	}
+
+	.markdown-body blockquote > :first-child {
+		margin-top: 0;
+	}
+
+	.markdown-body blockquote > :last-child {
+		margin-bottom: 0;
+	}
+
+	/* ---------------- 代码 ---------------- */
+
+	/* 行内代码。代码块（pre > code）的样式在 prism 主题文件里 */
+	.markdown-body :not(pre) > code {
+		padding: 0.2em 0.4em;
+		font-size: 85%;
+		font-family:
+			ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+			'Liberation Mono', monospace;
+		background-color: var(--md-code-bg, rgb(129 139 152 / 12%));
+		border-radius: 6px;
+	}
+
+	/* ---------------- 表格 ---------------- */
+
+	.markdown-body table {
+		display: block;
+		width: max-content;
+		max-width: 100%;
+		margin-top: 0;
+		margin-bottom: 1rem;
+		overflow: auto;
+		border-spacing: 0;
+		border-collapse: collapse;
+	}
+
+	.markdown-body th,
+	.markdown-body td {
+		padding: 6px 13px;
+		border: 1px solid var(--md-border);
+	}
+
+	.markdown-body th {
+		font-weight: 600;
+	}
+
+	.markdown-body tr {
+		background-color: transparent;
+	}
+
+	.markdown-body tr:nth-child(2n) {
+		background-color: var(--md-canvas-subtle);
+	}
+
+	/* ---------------- 其它 ---------------- */
+
+	.markdown-body hr {
+		height: 0.25em;
+		margin: 1.5rem 0;
+		padding: 0;
+		background-color: var(--md-border);
+		border: 0;
+	}
+
+	.markdown-body img {
+		max-width: 100%;
+		border-radius: 6px;
+	}
+
+	.markdown-body figure {
+		margin: 1rem 0;
+	}
+
+	.markdown-body kbd {
+		display: inline-block;
+		padding: 3px 5px;
+		font-family:
+			ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+			'Liberation Mono', monospace;
+		font-size: 11px;
+		line-height: 10px;
+		color: var(--md-fg);
+		vertical-align: middle;
+		background-color: var(--md-canvas-subtle);
+		border: 1px solid var(--md-border-muted);
+		border-radius: 6px;
+		box-shadow: inset 0 -1px 0 var(--md-border-muted);
+	}
+
+	.markdown-body details {
+		margin-bottom: 1rem;
+	}
+
+	.markdown-body summary {
+		font-weight: 600;
+		cursor: pointer;
+	}
+
+	/* 脚注 / 提示块里用到的语义色，跟随主题 */
+	.markdown-body [data-footnote-ref] {
+		text-decoration: none;
+	}
+}
