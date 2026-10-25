@@ -4,12 +4,7 @@ import { ExternalLinkIcon } from '@/assets';
 import Tag from '@/components/Tag';
 import { Card } from '@/components/ui/Card';
 import { withBasePath } from '@/lib/base-path';
-import {
-	AnimatePresence,
-	motion,
-	useMotionTemplate,
-	useMotionValue
-} from 'motion/react';
+import { motion, useMotionTemplate, useMotionValue } from 'motion/react';
 import Image from 'next/image';
 import React from 'react';
 
@@ -30,19 +25,25 @@ export function ProjectCard({ project }: { project: ProjectItem }) {
 		[mouseX, mouseY, radius]
 	);
 
-	const maskBackground = useMotionTemplate`radial-gradient(circle ${radius}px at ${mouseX}px ${mouseY}px, black 40%, transparent)`;
-	const [isHovering, setIsHovering] = React.useState(false);
+	/** 悬浮时跟随光标的紫色光晕 */
+	const spotlight = useMotionTemplate`radial-gradient(circle ${radius}px at ${mouseX}px ${mouseY}px, rgb(139 92 246 / 0.1), transparent 65%)`;
+
 	const host = url ? new URL(url).host : '';
 
 	return (
 		<Card
 			as="li"
 			key={id}
-			onMouseEnter={() => setIsHovering(true)}
+			onMouseEnter={handleMouseMove}
 			onMouseMove={handleMouseMove}
-			onMouseLeave={() => setIsHovering(false)}
 		>
-			<div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md ring-1 shadow-zinc-800/5 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
+			{/* 光标跟随的光晕 + 高亮描边，z-[1] 盖住悬浮底色、位于内容之下 */}
+			<motion.div
+				aria-hidden="true"
+				className="pointer-events-none absolute -inset-x-4 -inset-y-6 z-[1] border border-violet-500/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:-inset-x-6 sm:rounded-2xl dark:border-violet-400/30"
+				style={{ background: spotlight }}
+			/>
+			<div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md ring-1 shadow-zinc-800/5 ring-zinc-900/5 transition-transform duration-300 group-hover:scale-110 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
 				<Image
 					src={withBasePath(icon ?? '')}
 					alt=""
@@ -52,7 +53,7 @@ export function ProjectCard({ project }: { project: ProjectItem }) {
 					unoptimized
 				/>
 			</div>
-			<h2 className="mt-6 text-base font-bold text-zinc-800 dark:text-zinc-100">
+			<h2 className="mt-6 text-base font-bold text-zinc-800 transition-colors group-hover:text-violet-600 dark:text-zinc-100 dark:group-hover:text-violet-400">
 				<Card.Link href={url ?? ''} target="_blank">
 					{name}
 				</Card.Link>
@@ -67,29 +68,6 @@ export function ProjectCard({ project }: { project: ProjectItem }) {
 				<span className="mr-2">{host}</span>
 				<ExternalLinkIcon className="h-4 w-4 flex-none" />
 			</p>
-
-			<AnimatePresence>
-				{isHovering && (
-					<motion.footer
-						className="pointer-events-none absolute -inset-x-4 -inset-y-6 z-30 px-4 py-6 select-none sm:-inset-x-6 sm:rounded-2xl sm:px-6"
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						style={{ WebkitMaskImage: maskBackground }}
-						exit={{ opacity: 0 }}
-					>
-						<div className="absolute inset-x-px inset-y-px rounded-2xl border border-dashed border-zinc-900/30 dark:border-zinc-100/20" />
-						<div className="flex h-12 w-12 items-center justify-center rounded-full border border-dashed border-zinc-900/20 bg-white dark:border-zinc-100/20 dark:bg-zinc-800">
-							<div className="h-9 w-9 rounded-full border border-dashed border-zinc-900/40 dark:border-zinc-100/60 dark:bg-zinc-900/20" />
-						</div>
-						<h2 className="mt-6 text-base font-bold text-zinc-50 [text-shadow:rgb(0,0,0)_-0.5px_0.5px_0px,rgb(0,0,0)_0.5px_0.5px_0px,rgb(0,0,0)_0.5px_-0.5px_0px,rgb(0,0,0)_-0.5px_-0.5px_0px] dark:text-zinc-900 dark:[text-shadow:rgb(255,255,255)_-0.5px_0.5px_0px,rgb(255,255,255)_0.5px_0.5px_0px,rgb(255,255,255)_0.5px_-0.5px_0px,rgb(255,255,255)_-0.5px_-0.5px_0px]">
-							{name}
-						</h2>
-						<p className="mt-2 text-sm text-zinc-600 opacity-50 dark:text-zinc-400">
-							{description}
-						</p>
-					</motion.footer>
-				)}
-			</AnimatePresence>
 		</Card>
 	);
 }

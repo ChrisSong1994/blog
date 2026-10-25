@@ -9,7 +9,7 @@ interface ProjectItem {
 	name?: string;
 	url?: string;
 	description?: string;
-	/** public/ 下的图片路径，例如 '/projects/p1.png' */
+	/** public/ 下的图片路径，例如 '/projects/navigator.svg' */
 	icon?: string;
 	tags?: string[];
 }
