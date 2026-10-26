@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 /* tw-animate-css 是纯样式包（只导出 style 条件），必须用 @import 而不是 @plugin */
 @import 'tw-animate-css';
-/* 文章正文的 GitHub 风格样式，@import 必须排在所有规则前面 */
+/* 文章正文样式，@import 必须排在所有规则前面 */
 @import '../style/markdown.css';
 
 @plugin '@tailwindcss/forms';
@@ -14,9 +14,15 @@
    --------------------------------------------------------------- */
 @theme {
 	--font-sans:
-		var(--font-sans), ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+		var(--font-manrope), ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
 		Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'PingFang SC',
 		'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+	--font-serif:
+		var(--font-source-serif), 'Source Han Serif SC', 'Noto Serif SC',
+		'Songti SC', STSong, SimSun, Georgia, serif;
+	--font-mono:
+		ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+		'Liberation Mono', monospace;
 
 	/* 与原项目 tailwind.config.ts 的 fontSize 阶梯一致 */
 	--text-xs: 0.8125rem;
@@ -47,56 +53,73 @@
 	--text-9xl--line-height: 1;
 }
 
-/* shadcn/ui 的语义色：值写在这里，dark 下整体替换 */
+/* 纸张色系：暖白底 + 墨色文字 + 松柏绿点缀。
+   变量值直接写十六进制，便于在 dark 下整体替换。 */
 :root {
-	--background: hsl(0 0% 100%);
-	--foreground: hsl(0 0% 3.9%);
-	--card: hsl(0 0% 100%);
-	--card-foreground: hsl(0 0% 3.9%);
-	--popover: hsl(0 0% 100%);
-	--popover-foreground: hsl(0 0% 3.9%);
-	--primary: hsl(0 0% 9%);
-	--primary-foreground: hsl(0 0% 98%);
-	--secondary: hsl(0 0% 96.1%);
-	--secondary-foreground: hsl(0 0% 9%);
-	--muted: hsl(0 0% 96.1%);
-	--muted-foreground: hsl(0 0% 45.1%);
-	--accent: hsl(0 0% 96.1%);
-	--accent-foreground: hsl(0 0% 9%);
-	--destructive: hsl(0 84.2% 60.2%);
-	--destructive-foreground: hsl(0 0% 98%);
-	--border: hsl(0 0% 89.8%);
-	--input: hsl(0 0% 89.8%);
-	--ring: hsl(0 0% 3.9%);
+	--background: #fbfaf7;
+	--foreground: #1c1b18;
+	--surface: #ffffff;
+	--surface-muted: #f4f1ea;
+	--card: #ffffff;
+	--card-foreground: #1c1b18;
+	--popover: #ffffff;
+	--popover-foreground: #1c1b18;
+	--primary: #1c1b18;
+	--primary-foreground: #fbfaf7;
+	--secondary: #f2efe8;
+	--secondary-foreground: #1c1b18;
+	--muted: #f2efe8;
+	--muted-foreground: #6f6b62;
+	--accent: #f2efe8;
+	--accent-foreground: #1c1b18;
+	--destructive: #b4332a;
+	--destructive-foreground: #ffffff;
+	--border: #e6e2d8;
+	--input: #e6e2d8;
+	--ring: #2f6b57;
+
+	/* 品牌色：低饱和度的松柏绿，只用于链接、选中态与少量强调 */
+	--brand: #2f6b57;
+	--brand-foreground: #ffffff;
+	--brand-muted: #e9f0ec;
+
 	--radius: 0.5rem;
 }
 
 .dark {
-	--background: hsl(0 0% 3.9%);
-	--foreground: hsl(0 0% 98%);
-	--card: hsl(0 0% 3.9%);
-	--card-foreground: hsl(0 0% 98%);
-	--popover: hsl(0 0% 3.9%);
-	--popover-foreground: hsl(0 0% 98%);
-	--primary: hsl(0 0% 98%);
-	--primary-foreground: hsl(0 0% 9%);
-	--secondary: hsl(0 0% 14.9%);
-	--secondary-foreground: hsl(0 0% 98%);
-	--muted: hsl(0 0% 14.9%);
-	--muted-foreground: hsl(0 0% 63.9%);
-	--accent: hsl(0 0% 14.9%);
-	--accent-foreground: hsl(0 0% 98%);
-	--destructive: hsl(0 62.8% 30.6%);
-	--destructive-foreground: hsl(0 0% 98%);
-	--border: hsl(0 0% 14.9%);
-	--input: hsl(0 0% 14.9%);
-	--ring: hsl(0 0% 83.1%);
+	--background: #121210;
+	--foreground: #e8e5dd;
+	--surface: #181816;
+	--surface-muted: #1e1e1b;
+	--card: #181816;
+	--card-foreground: #e8e5dd;
+	--popover: #181816;
+	--popover-foreground: #e8e5dd;
+	--primary: #e8e5dd;
+	--primary-foreground: #121210;
+	--secondary: #1e1e1b;
+	--secondary-foreground: #e8e5dd;
+	--muted: #1e1e1b;
+	--muted-foreground: #a09c92;
+	--accent: #1e1e1b;
+	--accent-foreground: #e8e5dd;
+	--destructive: #7a2e26;
+	--destructive-foreground: #f5ece9;
+	--border: #2b2a26;
+	--input: #2b2a26;
+	--ring: #8fbfa9;
+
+	--brand: #8fbfa9;
+	--brand-foreground: #10231b;
+	--brand-muted: #1b2b24;
 }
 
 /* 用 inline 让工具类直接引用上面的变量，这样 .dark 切换能实时生效 */
 @theme inline {
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
+	--color-surface: var(--surface);
+	--color-surface-muted: var(--surface-muted);
 	--color-card: var(--card);
 	--color-card-foreground: var(--card-foreground);
 	--color-popover: var(--popover);
@@ -115,6 +138,10 @@
 	--color-input: var(--input);
 	--color-ring: var(--ring);
 
+	--color-brand: var(--brand);
+	--color-brand-foreground: var(--brand-foreground);
+	--color-brand-muted: var(--brand-muted);
+
 	--radius-sm: calc(var(--radius) - 4px);
 	--radius-md: calc(var(--radius) - 2px);
 	--radius-lg: var(--radius);
@@ -131,10 +158,64 @@
 
 	html {
 		scroll-behavior: smooth;
+		-webkit-text-size-adjust: 100%;
+		text-rendering: optimizeLegibility;
 	}
 
 	body {
-		@apply bg-background text-foreground;
+		@apply bg-background text-foreground antialiased;
+		font-synthesis-weight: none;
+	}
+
+	::selection {
+		background-color: color-mix(in srgb, var(--brand) 22%, transparent);
+		color: var(--foreground);
+	}
+
+	/* 键盘焦点统一成品牌色的细描边 */
+	:where(a, button, input, textarea, select):focus-visible {
+		outline: 2px solid color-mix(in srgb, var(--brand) 55%, transparent);
+		outline-offset: 2px;
+	}
+}
+
+/* ---------------------------------------------------------------
+   通用排版工具
+   --------------------------------------------------------------- */
+@layer components {
+	/* 小号全大写标签，用于分区标题、日期与元信息 */
+	.eyebrow {
+		@apply font-mono text-[0.6875rem] font-medium tracking-[0.2em] uppercase;
+		color: var(--muted-foreground);
+	}
+
+	/* 文内链接：下划线默认淡化，hover 时收紧颜色 */
+	.text-link {
+		color: var(--brand);
+		text-decoration-line: underline;
+		text-decoration-color: color-mix(in srgb, var(--brand) 35%, transparent);
+		text-underline-offset: 0.22em;
+		transition:
+			color 150ms ease,
+			text-decoration-color 150ms ease;
+	}
+
+	.text-link:hover {
+		text-decoration-color: currentColor;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
 	}
 }
 

@@ -3,7 +3,7 @@ import GoogleAnalytics from '@/components/GoogleAnalytics';
 import siteMetadata from '@/config/site';
 import { withBasePath } from '@/lib/base-path';
 import { constructSiteUrl } from '@/lib';
-import { sansFont } from '@/lib/font';
+import { sansFont, serifFont } from '@/lib/font';
 import { type Viewport, type Metadata } from 'next';
 import { ThemeProvider } from 'next-themes';
 import './globals.css';
@@ -56,8 +56,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html
-			className={`${sansFont.variable} m-0 h-full p-0 font-sans antialiased`}
+			className={`${sansFont.variable} ${serifFont.variable} m-0 h-full p-0 font-sans antialiased`}
 			lang={siteMetadata.locale}
+			data-scroll-behavior="smooth"
 			suppressHydrationWarning
 		>
 			<body>

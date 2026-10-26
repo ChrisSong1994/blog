@@ -4,7 +4,7 @@ import React from 'react';
 type ContainerProps = React.ComponentPropsWithoutRef<'div'> & {
 	/**
 	 * 内层（负责居中 + 限宽）那层 div 的额外类名。
-	 * 默认 Outer 是 `max-w-7xl`、Inner 是 `max-w-2xl lg:max-w-5xl`，
+	 * 默认 Outer 是 `max-w-6xl`、Inner 是 `max-w-5xl`，
 	 * 需要更宽的内容区时用 `lg:max-w-none` 之类覆盖。
 	 */
 	innerClassName?: string;
@@ -16,8 +16,8 @@ const OuterContainer = React.forwardRef<HTMLDivElement, ContainerProps>(
 		ref
 	) {
 		return (
-			<div ref={ref} className={cn('sm:px-8', className)} {...props}>
-				<div className={cn('mx-auto max-w-7xl lg:px-8', innerClassName)}>
+			<div ref={ref} className={cn('px-5 sm:px-8 lg:px-12', className)} {...props}>
+				<div className={cn('mx-auto w-full max-w-6xl', innerClassName)}>
 					{children}
 				</div>
 			</div>
@@ -31,12 +31,8 @@ const InnerContainer = React.forwardRef<HTMLDivElement, ContainerProps>(
 		ref
 	) {
 		return (
-			<div
-				ref={ref}
-				className={cn('relative px-4 sm:px-8 lg:px-12', className)}
-				{...props}
-			>
-				<div className={cn('mx-auto max-w-2xl lg:max-w-5xl', innerClassName)}>
+			<div ref={ref} className={cn('relative', className)} {...props}>
+				<div className={cn('mx-auto w-full max-w-5xl', innerClassName)}>
 					{children}
 				</div>
 			</div>

@@ -46,12 +46,12 @@ export default function CodeBlock({
 				type="button"
 				onClick={handleCopy}
 				aria-label="复制代码"
-				className="absolute top-2 right-2 flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-zinc-200/80 bg-white/85 text-zinc-500 opacity-0 transition select-none hover:text-zinc-900 focus-visible:opacity-100 group-hover:opacity-100 max-sm:opacity-100 dark:border-zinc-700/80 dark:bg-zinc-800/85 dark:text-zinc-400 dark:hover:text-zinc-100"
+				className="absolute top-2.5 right-2.5 flex size-7 cursor-pointer items-center justify-center rounded-md border border-border/70 bg-surface/80 text-muted-foreground opacity-0 backdrop-blur transition hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100 max-sm:opacity-100"
 			>
 				{copied ? (
-					<ClipboardCheckIcon className="h-4 w-4" />
+					<ClipboardCheckIcon className="h-3.5 w-3.5" />
 				) : (
-					<ClipboardDataIcon className="h-4 w-4" />
+					<ClipboardDataIcon className="h-3.5 w-3.5" />
 				)}
 			</button>
 		</div>

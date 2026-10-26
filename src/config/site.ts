@@ -68,8 +68,8 @@ export const baseSiteConfig: SiteConfig = {
 		}
 	],
 	themeColors: [
-		{ media: '(prefers-color-scheme: dark)', color: '#000212' },
-		{ media: '(prefers-color-scheme: light)', color: '#fafafa' }
+		{ media: '(prefers-color-scheme: dark)', color: '#121210' },
+		{ media: '(prefers-color-scheme: light)', color: '#fbfaf7' }
 	],
 	defaultNextTheme: 'system', // next-themes 选项：system | dark | light
 	icons: {

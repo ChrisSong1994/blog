@@ -2,7 +2,7 @@
 
 import type { Post } from '@/lib/posts';
 import dayjs from 'dayjs';
-import { Search } from 'lucide-react';
+import { ArrowUpRight, Search } from 'lucide-react';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { Tag } from './TagItem';
@@ -50,69 +50,87 @@ export function PostsTimeline({ posts }: PostsTimelineProps) {
 	}, [filteredPosts]);
 
 	return (
-		<div className="space-y-10">
-			<div className="relative max-w-xl">
-				<Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-				<input
-					type="search"
-					value={query}
-					onChange={(event) => setQuery(event.target.value)}
-					placeholder="搜索文章标题、标签或简介"
-					aria-label="搜索文章"
-					className="w-full rounded-md border border-zinc-200 bg-background py-2 pr-3 pl-10 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/30 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
-				/>
+		<div>
+			<div className="mt-8 flex items-center justify-between gap-6 border-b border-border/60 pb-3">
+				<div className="relative w-full max-w-xs">
+					<Search
+						className="pointer-events-none absolute top-1/2 left-0 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
+						aria-hidden="true"
+					/>
+					<input
+						type="search"
+						value={query}
+						onChange={(event) => setQuery(event.target.value)}
+						placeholder="搜索标题、标签或摘要"
+						aria-label="搜索文章"
+						className="w-full border-0 bg-transparent py-1 pr-3 pl-6 text-sm text-foreground placeholder:text-muted-foreground/70 focus:ring-0 focus:outline-none"
+					/>
+				</div>
+				<span className="shrink-0 font-mono text-[11px] tracking-wider text-muted-foreground">
+					{filteredPosts.length} 篇
+				</span>
 			</div>
 
 			{filteredPosts.length === 0 ? (
-				<p className="text-sm text-muted-foreground">
-					没有找到与“<span className="text-foreground">{query}</span>
-					”相关的文章。
+				<p className="mt-10 text-sm text-muted-foreground">
+					没有找到与“<span className="text-foreground">{query}</span>”相关的文章。
 				</p>
 			) : (
-				<div className="space-y-12">
+				<div className="mt-12 space-y-16">
 					{groupedPosts.map(({ year, items }) => (
-						<section key={year} className="space-y-6">
-							<div className="flex items-center gap-3">
-								<div className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-sm font-semibold text-foreground">
+						<section key={year} aria-labelledby={`year-${year}`}>
+							<div className="flex items-baseline justify-between border-b border-border/70 pb-3">
+								<h2
+									id={`year-${year}`}
+									className="font-serif text-2xl font-semibold tracking-tight text-foreground"
+								>
 									{year}
-								</div>
-								<div className="flex-1 border-t border-dashed border-border/70" />
+								</h2>
+								<span className="font-mono text-[11px] tracking-wider text-muted-foreground">
+									{String(items.length).padStart(2, '0')} 篇
+								</span>
 							</div>
-							<div className="space-y-8 border-l border-border/60 pl-6 dark:border-border/40">
+
+							<ul className="divide-y divide-border/50">
 								{items.map((post) => (
-									<article key={post.slug} className="relative">
-										<span className="absolute top-1.5 -left-[9px] inline-flex h-3 w-3 items-center justify-center rounded-full border-2 border-background bg-violet-500 shadow dark:border-zinc-950 dark:bg-violet-400" />
-										<div className="rounded-lg border border-border/60 bg-card/40 p-4 transition-colors hover:border-violet-500/40 hover:bg-card">
-											<div className="flex flex-col gap-2">
-												<time
-													dateTime={post.date}
-													className="text-xs tracking-wide text-muted-foreground uppercase"
-												>
-													{dayjs(post.date).format('YYYY-MM-DD')}
-												</time>
-												<Link
-													href={`/posts/${post.slug}`}
-													className="text-lg font-semibold text-foreground transition-colors hover:text-violet-600 dark:hover:text-violet-400"
-												>
+									<li key={post.slug}>
+										<Link
+											href={`/posts/${post.slug}`}
+											className="group grid gap-x-6 gap-y-2 py-6 sm:grid-cols-[5.5rem_1fr_1rem]"
+										>
+											<time
+												dateTime={post.date}
+												className="font-mono text-[11px] tracking-wider text-muted-foreground sm:pt-1.5"
+											>
+												{dayjs(post.date).format('MM.DD')}
+											</time>
+
+											<div className="min-w-0">
+												<h3 className="font-serif text-lg leading-snug font-medium text-foreground transition-colors group-hover:text-brand">
 													{post.title}
-												</Link>
+												</h3>
 												{post.description ? (
-													<p className="text-sm leading-relaxed text-muted-foreground">
+													<p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">
 														{post.description}
 													</p>
 												) : null}
 												{post.tags?.length ? (
-													<div className="mt-1 flex flex-wrap gap-2">
+													<div className="mt-3 flex flex-wrap gap-2">
 														{post.tags.map((tag) => (
 															<Tag key={tag}>{tag}</Tag>
 														))}
 													</div>
 												) : null}
 											</div>
-										</div>
-									</article>
+
+											<ArrowUpRight
+												className="hidden size-4 translate-y-1.5 text-muted-foreground opacity-0 transition-all group-hover:translate-y-1 group-hover:text-brand group-hover:opacity-100 sm:block"
+												aria-hidden="true"
+											/>
+										</Link>
+									</li>
 								))}
-							</div>
+							</ul>
 						</section>
 					))}
 				</div>

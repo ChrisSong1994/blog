@@ -19,7 +19,7 @@ function AvatarContainer({ className, ...props }: ComponentProps) {
 		<div
 			className={cn(
 				className,
-				'h-10 w-10 rounded-full bg-white/90 p-0.5 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:ring-white/10'
+				'size-8 shrink-0 overflow-hidden rounded-full border border-border bg-surface p-[1.5px] transition-colors group-hover:border-brand/50'
 			)}
 			{...props}
 		/>
@@ -44,20 +44,17 @@ function AvatarImage({
 	return (
 		<Link
 			aria-label="主页"
-			className={cn(className, 'pointer-events-auto')}
+			className={cn('block h-full w-full', className)}
 			href={href ?? '/'}
 			{...props}
 		>
 			<Image
 				src={alt ? LOGO_ALT_SRC : LOGO_SRC}
 				alt=""
-				sizes={large ? '4rem' : '2.25rem'}
-				className={cn(
-					'rounded-full bg-zinc-100 object-cover dark:bg-zinc-800',
-					large ? 'h-16 w-16' : 'h-9 w-9'
-				)}
-				width={large ? 64 : 36}
-				height={large ? 64 : 36}
+				sizes={large ? '4rem' : '2rem'}
+				className="h-full w-full rounded-full object-cover"
+				width={large ? 64 : 32}
+				height={large ? 64 : 32}
 				unoptimized
 			/>
 		</Link>

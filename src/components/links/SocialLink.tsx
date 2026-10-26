@@ -125,11 +125,11 @@ export function SocialLink({
 				<TooltipTrigger>
 					{isPicture ? (
 						<PictureDialog platform={platform} href={href}>
-							<Icon className="text-2xl text-zinc-400 transition group-hover:text-zinc-700 dark:text-zinc-400 dark:group-hover:text-zinc-200" />
+							<Icon className="text-[1.15rem] text-muted-foreground transition-colors hover:text-foreground" />
 						</PictureDialog>
 					) : (
 						<LinkHrefWrapper platform={platform} href={href} {...props}>
-							<Icon className="text-2xl text-zinc-400 transition group-hover:text-zinc-700 dark:text-zinc-400 dark:group-hover:text-zinc-200" />
+							<Icon className="text-[1.15rem] text-muted-foreground transition-colors hover:text-foreground" />
 						</LinkHrefWrapper>
 					)}
 				</TooltipTrigger>

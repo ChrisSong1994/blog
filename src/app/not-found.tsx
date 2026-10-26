@@ -1,36 +1,22 @@
-'use client';
-
-import NotFound from '@/assets/unDraw/404.svg';
-import { motion } from 'motion/react';
-import Image from 'next/image';
 import Link from 'next/link';
 
 export default function NotFoundPage() {
 	return (
-		<main className="h-screen">
-			<div className="pointer-events-none absolute inset-0 flex h-full w-full flex-col items-center justify-center">
-				<motion.h1
-					className="pointer-events-none mb-10 flex flex-col items-center justify-center text-3xl font-bold text-black select-none dark:text-white"
-					initial={{ opacity: 0, y: 30 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.3, delay: 0.3 }}
-				>
-					<Image
-						src={NotFound}
-						alt="404"
-						unoptimized
-						width={320}
-						className="mb-12"
-					/>
-					<span className="text-violet-500 dark:text-violet-300">
-						来到了未知的位置
-					</span>
-				</motion.h1>
+		<main className="flex min-h-dvh items-center justify-center px-6">
+			<div className="flex max-w-md flex-col items-start">
+				<p className="eyebrow">404 / Not Found</p>
+				<h1 className="mt-5 font-serif text-4xl font-semibold tracking-tight text-foreground">
+					这一页不存在
+					<span className="text-brand">。</span>
+				</h1>
+				<p className="mt-4 text-sm leading-7 text-muted-foreground">
+					链接可能已经失效，或者从未存在过。可以回到首页，继续读点别的。
+				</p>
 				<Link
 					href="/"
-					className="pointer-events-auto text-xl font-bold text-white mix-blend-difference select-none hover:underline"
+					className="mt-8 inline-flex h-10 items-center rounded-full border border-border px-5 text-sm text-foreground transition-colors hover:border-brand/40 hover:text-brand"
 				>
-					返回主页
+					返回首页
 				</Link>
 			</div>
 		</main>

@@ -1,73 +1,61 @@
-'use client';
-
-import { ExternalLinkIcon } from '@/assets';
 import Tag from '@/components/Tag';
-import { Card } from '@/components/ui/Card';
 import { withBasePath } from '@/lib/base-path';
-import { motion, useMotionTemplate, useMotionValue } from 'motion/react';
+import { ArrowUpRight } from 'lucide-react';
 import Image from 'next/image';
-import React from 'react';
+import Link from 'next/link';
 
 export function ProjectCard({ project }: { project: ProjectItem }) {
 	const { id, url, icon, name, tags, description } = project;
-
-	const mouseX = useMotionValue(0);
-	const mouseY = useMotionValue(0);
-	const radius = useMotionValue(0);
-
-	const handleMouseMove = React.useCallback(
-		({ clientX, clientY, currentTarget }: React.MouseEvent) => {
-			const bounds = currentTarget.getBoundingClientRect();
-			mouseX.set(clientX - bounds.left);
-			mouseY.set(clientY - bounds.top);
-			radius.set(Math.sqrt(bounds.width ** 2 + bounds.height ** 2) / 2);
-		},
-		[mouseX, mouseY, radius]
-	);
-
-	/** 悬浮时跟随光标的紫色光晕 */
-	const spotlight = useMotionTemplate`radial-gradient(circle ${radius}px at ${mouseX}px ${mouseY}px, rgb(139 92 246 / 0.1), transparent 65%)`;
-
 	const host = url ? new URL(url).host : '';
 
 	return (
-		<Card
-			as="li"
+		<li
 			key={id}
-			onMouseEnter={handleMouseMove}
-			onMouseMove={handleMouseMove}
+			className="group relative flex h-full flex-col rounded-lg border border-border/80 bg-surface/60 p-6 transition-colors hover:border-brand/35 hover:bg-surface"
 		>
-			{/* 光标跟随的光晕 + 高亮描边，z-[1] 盖住悬浮底色、位于内容之下 */}
-			<motion.div
-				aria-hidden="true"
-				className="pointer-events-none absolute -inset-x-4 -inset-y-6 z-[1] border border-violet-500/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:-inset-x-6 sm:rounded-2xl dark:border-violet-400/30"
-				style={{ background: spotlight }}
-			/>
-			<div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md ring-1 shadow-zinc-800/5 ring-zinc-900/5 transition-transform duration-300 group-hover:scale-110 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
-				<Image
-					src={withBasePath(icon ?? '')}
-					alt=""
-					width={36}
-					height={36}
-					className="h-9 w-9 rounded-full"
-					unoptimized
+			<div className="flex items-start justify-between gap-4">
+				<div className="flex size-10 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background p-1.5">
+					<Image
+						src={withBasePath(icon ?? '')}
+						alt=""
+						width={40}
+						height={40}
+						className="size-full rounded-sm object-contain"
+						unoptimized
+					/>
+				</div>
+				<ArrowUpRight
+					className="size-4 text-muted-foreground/60 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand"
+					aria-hidden="true"
 				/>
 			</div>
-			<h2 className="mt-6 text-base font-bold text-zinc-800 transition-colors group-hover:text-violet-600 dark:text-zinc-100 dark:group-hover:text-violet-400">
-				<Card.Link href={url ?? ''} target="_blank">
+
+			<h2 className="mt-5 font-serif text-lg font-semibold tracking-tight text-foreground">
+				<Link
+					href={url ?? '#'}
+					target="_blank"
+					rel="noreferrer"
+					className="after:absolute after:inset-0 after:z-10 after:content-['']"
+				>
 					{name}
-				</Card.Link>
+				</Link>
 			</h2>
-			<Card.Description>{description}</Card.Description>
-			<div className="mt-4">
-				{tags?.map((tag) => (
-					<Tag key={tag}>{tag}</Tag>
-				))}
-			</div>
-			<p className="pointer-events-none relative z-40 mt-6 flex items-center text-sm font-medium text-zinc-400 transition group-hover:-translate-y-0.5 group-hover:text-violet-600 dark:text-zinc-200 dark:group-hover:text-violet-400">
-				<span className="mr-2">{host}</span>
-				<ExternalLinkIcon className="h-4 w-4 flex-none" />
+
+			<p className="mt-2 flex-1 text-sm leading-6 text-muted-foreground">
+				{description}
 			</p>
-		</Card>
+
+			{tags?.length ? (
+				<div className="mt-5 flex flex-wrap gap-2">
+					{tags.map((tag) => (
+						<Tag key={tag}>{tag}</Tag>
+					))}
+				</div>
+			) : null}
+
+			<p className="mt-5 border-t border-border/50 pt-4 font-mono text-[11px] tracking-wide text-muted-foreground">
+				{host}
+			</p>
+		</li>
 	);
 }

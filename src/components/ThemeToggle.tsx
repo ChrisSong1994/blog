@@ -1,28 +1,20 @@
 'use client';
 
-import { Switch } from '@/components/ui/switch';
 import { useIsMounted } from '@/hooks/useIsMounted';
 import { withBasePath } from '@/lib/base-path';
 import 'client-only';
 import { Moon, Sun } from 'lucide-react';
-import { motion } from 'motion/react';
 import { useTheme } from 'next-themes';
 import { useEffect, useRef } from 'react';
 import useThemeToggleAnimation from '../hooks/useThemeToggleAnimation';
 import { Toaster } from './ui/sonner';
 
-const spring = {
-	type: 'spring',
-	stiffness: 900,
-	damping: 80
-} as const;
-
 export default function ThemeToggle() {
-	// 主题只有挂载后才拿得到，先不渲染，避免闪一下再跳成另一个主题
+	// 主题只有挂载后才拿得到，先占一个同尺寸的空位，避免布局跳动
 	const mounted = useIsMounted();
-	const { theme, setTheme } = useTheme();
+	const { resolvedTheme, setTheme } = useTheme();
 	const toggleRef = useRef<HTMLButtonElement>(null);
-	const isDarkMode = theme === 'dark';
+	const isDarkMode = resolvedTheme === 'dark';
 
 	const { toggleDarkMode } = useThemeToggleAnimation({
 		domRef: toggleRef,
@@ -32,6 +24,8 @@ export default function ThemeToggle() {
 
 	// 按主题切换代码高亮样式表
 	useEffect(() => {
+		if (!resolvedTheme) return;
+
 		const link = document.createElement('link');
 		link.rel = 'stylesheet';
 		link.href = withBasePath(
@@ -44,37 +38,29 @@ export default function ThemeToggle() {
 		return () => {
 			document.head.removeChild(link);
 		};
-	}, [isDarkMode]);
+	}, [isDarkMode, resolvedTheme]);
 
 	if (!mounted) {
-		return null;
+		return <div className="size-9" aria-hidden="true" />;
 	}
 
 	return (
-		<div className="flex items-center space-x-2">
-			<Switch
+		<>
+			<button
 				ref={toggleRef}
-				id="theme-toggle"
-				aria-label="切换主题"
-				checked={isDarkMode}
-				onCheckedChange={() => void toggleDarkMode()}
-				className="h-8 w-16 px-1"
+				type="button"
+				onClick={() => void toggleDarkMode()}
+				aria-label={isDarkMode ? '切换到浅色主题' : '切换到深色主题'}
+				title={isDarkMode ? '切换到浅色主题' : '切换到深色主题'}
+				className="inline-flex size-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-brand/40 hover:text-foreground"
 			>
-				<motion.div
-					initial={{ x: -20, opacity: 0 }}
-					animate={{ x: 0, opacity: 1 }}
-					exit={{ x: 20, opacity: 0 }}
-					layout
-					transition={spring}
-				>
-					{isDarkMode ? (
-						<Moon className="ml-[2px] h-5 w-5 text-violet-400" />
-					) : (
-						<Sun className="h-5 w-5 text-violet-500" />
-					)}
-				</motion.div>
-			</Switch>
+				{isDarkMode ? (
+					<Sun className="size-[15px]" strokeWidth={1.6} />
+				) : (
+					<Moon className="size-[15px]" strokeWidth={1.6} />
+				)}
+			</button>
 			<Toaster theme={isDarkMode ? 'dark' : 'light'} richColors />
-		</div>
+		</>
 	);
 }

@@ -1,5 +1,5 @@
 /**
- * 文章正文的 GitHub Markdown 风格（明暗两套，用 CSS 变量切换）。
+ * 文章正文排版。
  *
  * 注意：这里所有规则都在 `@layer components` 里，而 `public/style/prism-*.css`
  * 是运行时用 <link> 插进来的、不带任何 @layer，按 CSS 层叠层规则**未分层的样式
@@ -9,37 +9,28 @@
 
 @layer components {
 	.markdown-body {
-		/* GitHub Primer 的明色 token */
-		--md-fg: #1f2328;
-		--md-fg-muted: #59636e;
-		--md-canvas-subtle: #f6f8fa;
-		--md-border: #d1d9e0;
-		--md-border-muted: #d1d9e0b3;
-		--md-accent: #0969da;
-		--md-danger-fg: #82071e;
-		--md-success-fg: #116329;
-		--md-code-bg: rgb(129 139 152 / 12%);
+		--md-fg: var(--foreground);
+		--md-fg-muted: var(--muted-foreground);
+		--md-canvas-subtle: var(--surface-muted);
+		--md-border: var(--border);
+		--md-accent: var(--brand);
+		--md-code-bg: var(--surface-muted);
 
+		font-size: 1rem;
+		line-height: 1.85;
 		color: var(--md-fg);
-		line-height: 1.6;
 		word-wrap: break-word;
-	}
-
-	.dark .markdown-body {
-		--md-fg: #f0f6fc;
-		--md-fg-muted: #9198a1;
-		--md-canvas-subtle: #151b23;
-		--md-border: #3d444d;
-		--md-border-muted: #3d444db3;
-		--md-accent: #4493f8;
-		--md-danger-fg: #ffdcd7;
-		--md-success-fg: #aff5b4;
-		--md-code-bg: rgb(101 108 118 / 50%);
 	}
 
 	/* 首尾元素不留外边距，避免正文上下多出一截空白 */
 	.markdown-body > :first-child {
 		margin-top: 0;
+	}
+
+	/* 正文以标题开头时（关于页），不要再补一条分隔线 */
+	.markdown-body > :is(h1, h2):first-child {
+		padding-top: 0;
+		border-top: 0;
 	}
 
 	.markdown-body > :last-child {
@@ -48,17 +39,24 @@
 
 	.markdown-body p {
 		margin-top: 0;
-		margin-bottom: 1rem;
+		margin-bottom: 1.4rem;
 	}
 
 	.markdown-body a {
 		color: var(--md-accent);
-		text-decoration: underline;
-		text-underline-offset: 0.2rem;
+		text-decoration-line: underline;
+		text-decoration-color: color-mix(in srgb, var(--md-accent) 35%, transparent);
+		text-underline-offset: 0.22em;
+		transition: text-decoration-color 150ms ease;
+	}
+
+	.markdown-body a:hover {
+		text-decoration-color: currentColor;
 	}
 
 	.markdown-body strong {
 		font-weight: 600;
+		color: var(--md-fg);
 	}
 
 	.markdown-body del {
@@ -73,38 +71,49 @@
 	.markdown-body h4,
 	.markdown-body h5,
 	.markdown-body h6 {
-		margin-top: 1.5rem;
-		margin-bottom: 1rem;
+		font-family: var(--font-serif);
 		font-weight: 600;
-		line-height: 1.25;
+		color: var(--md-fg);
+		line-height: 1.35;
+		letter-spacing: -0.01em;
+		text-wrap: balance;
 	}
 
 	.markdown-body h1 {
-		padding-bottom: 0.3em;
-		font-size: 2em;
-		border-bottom: 1px solid var(--md-border-muted);
+		margin-top: 3.5rem;
+		margin-bottom: 1.5rem;
+		font-size: 1.875rem;
 	}
 
+	/* h2 用一条细分隔线起头，给长文一个清晰的段落节拍 */
 	.markdown-body h2 {
-		padding-bottom: 0.3em;
-		font-size: 1.5em;
-		border-bottom: 1px solid var(--md-border-muted);
+		margin-top: 3.5rem;
+		margin-bottom: 1.25rem;
+		padding-top: 1.75rem;
+		font-size: 1.5rem;
+		border-top: 1px solid color-mix(in srgb, var(--md-border) 70%, transparent);
 	}
 
 	.markdown-body h3 {
-		font-size: 1.25em;
+		margin-top: 2.5rem;
+		margin-bottom: 0.9rem;
+		font-size: 1.1875rem;
 	}
 
 	.markdown-body h4 {
-		font-size: 1em;
+		margin-top: 2rem;
+		margin-bottom: 0.75rem;
+		font-size: 1.0625rem;
 	}
 
-	.markdown-body h5 {
-		font-size: 0.875em;
+	.markdown-body h5,
+	.markdown-body h6 {
+		margin-top: 1.75rem;
+		margin-bottom: 0.5rem;
+		font-size: 0.9375rem;
 	}
 
 	.markdown-body h6 {
-		font-size: 0.85em;
 		color: var(--md-fg-muted);
 	}
 
@@ -120,7 +129,9 @@
 
 	.markdown-body .anchor:hover::after {
 		content: '#';
-		margin-left: 0.35rem;
+		margin-left: 0.4rem;
+		font-family: var(--font-mono);
+		font-size: 0.75em;
 		font-weight: 400;
 		color: var(--md-accent);
 	}
@@ -130,8 +141,8 @@
 	.markdown-body ul,
 	.markdown-body ol {
 		margin-top: 0;
-		margin-bottom: 1rem;
-		padding-left: 2em;
+		margin-bottom: 1.4rem;
+		padding-left: 1.4em;
 	}
 
 	.markdown-body ul {
@@ -142,11 +153,15 @@
 		list-style-type: decimal;
 	}
 
+	.markdown-body li::marker {
+		color: color-mix(in srgb, var(--md-fg-muted) 80%, transparent);
+	}
+
 	.markdown-body ul ul,
 	.markdown-body ul ol,
 	.markdown-body ol ol,
 	.markdown-body ol ul {
-		margin-top: 0.25rem;
+		margin-top: 0.4rem;
 		margin-bottom: 0;
 	}
 
@@ -159,11 +174,11 @@
 	}
 
 	.markdown-body li + li {
-		margin-top: 0.25em;
+		margin-top: 0.4em;
 	}
 
 	.markdown-body li > p {
-		margin-bottom: 0.5rem;
+		margin-bottom: 0.6rem;
 	}
 
 	/* GFM 任务列表：checkbox 顶到项目符号的位置 */
@@ -174,6 +189,7 @@
 	.markdown-body li > input[type='checkbox'] {
 		margin: 0 0.2em 0.25em -1.4em;
 		vertical-align: middle;
+		accent-color: var(--md-accent);
 	}
 
 	.markdown-body dt {
@@ -187,10 +203,10 @@
 	/* ---------------- 引用 ---------------- */
 
 	.markdown-body blockquote {
-		margin: 0 0 1rem;
-		padding: 0 1em;
+		margin: 1.75rem 0;
+		padding: 0.1rem 0 0.1rem 1.25rem;
 		color: var(--md-fg-muted);
-		border-left: 0.25em solid var(--md-border);
+		border-left: 2px solid color-mix(in srgb, var(--md-accent) 55%, transparent);
 	}
 
 	.markdown-body blockquote > :first-child {
@@ -205,13 +221,13 @@
 
 	/* 行内代码。代码块（pre > code）的样式在 prism 主题文件里 */
 	.markdown-body :not(pre) > code {
-		padding: 0.2em 0.4em;
-		font-size: 85%;
-		font-family:
-			ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
-			'Liberation Mono', monospace;
-		background-color: var(--md-code-bg, rgb(129 139 152 / 12%));
-		border-radius: 6px;
+		padding: 0.18em 0.4em;
+		font-family: var(--font-mono);
+		font-size: 0.86em;
+		color: var(--md-fg);
+		background-color: var(--md-code-bg);
+		border: 1px solid color-mix(in srgb, var(--md-border) 65%, transparent);
+		border-radius: 4px;
 	}
 
 	/* ---------------- 表格 ---------------- */
@@ -221,67 +237,77 @@
 		width: max-content;
 		max-width: 100%;
 		margin-top: 0;
-		margin-bottom: 1rem;
+		margin-bottom: 1.5rem;
 		overflow: auto;
+		font-size: 0.9375rem;
 		border-spacing: 0;
 		border-collapse: collapse;
 	}
 
 	.markdown-body th,
 	.markdown-body td {
-		padding: 6px 13px;
-		border: 1px solid var(--md-border);
+		padding: 0.55rem 0.9rem;
+		border: 1px solid color-mix(in srgb, var(--md-border) 70%, transparent);
 	}
 
 	.markdown-body th {
 		font-weight: 600;
+		text-align: left;
+		background-color: var(--md-canvas-subtle);
 	}
 
 	.markdown-body tr {
 		background-color: transparent;
 	}
 
-	.markdown-body tr:nth-child(2n) {
-		background-color: var(--md-canvas-subtle);
-	}
-
 	/* ---------------- 其它 ---------------- */
 
 	.markdown-body hr {
-		height: 0.25em;
-		margin: 1.5rem 0;
-		padding: 0;
-		background-color: var(--md-border);
+		width: 4.5rem;
+		height: 0;
+		margin: 3.25rem auto;
 		border: 0;
+		border-top: 1px solid var(--md-border);
 	}
 
 	.markdown-body img {
 		max-width: 100%;
-		border-radius: 6px;
+		height: auto;
+		border: 1px solid color-mix(in srgb, var(--md-border) 70%, transparent);
+		border-radius: 4px;
 	}
 
 	.markdown-body figure {
-		margin: 1rem 0;
+		margin: 2rem 0;
+	}
+
+	.markdown-body figcaption {
+		margin-top: 0.75rem;
+		font-size: 0.8125rem;
+		color: var(--md-fg-muted);
+		text-align: center;
 	}
 
 	.markdown-body kbd {
 		display: inline-block;
-		padding: 3px 5px;
-		font-family:
-			ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
-			'Liberation Mono', monospace;
-		font-size: 11px;
-		line-height: 10px;
+		padding: 0.15rem 0.4rem;
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		line-height: 1.4;
 		color: var(--md-fg);
 		vertical-align: middle;
 		background-color: var(--md-canvas-subtle);
-		border: 1px solid var(--md-border-muted);
-		border-radius: 6px;
-		box-shadow: inset 0 -1px 0 var(--md-border-muted);
+		border: 1px solid var(--md-border);
+		border-radius: 4px;
+		box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--md-border) 80%, transparent);
 	}
 
 	.markdown-body details {
-		margin-bottom: 1rem;
+		margin-bottom: 1.4rem;
+		padding: 0.75rem 1rem;
+		background-color: color-mix(in srgb, var(--md-canvas-subtle) 60%, transparent);
+		border: 1px solid color-mix(in srgb, var(--md-border) 65%, transparent);
+		border-radius: 6px;
 	}
 
 	.markdown-body summary {
@@ -292,5 +318,10 @@
 	/* 脚注 / 提示块里用到的语义色，跟随主题 */
 	.markdown-body [data-footnote-ref] {
 		text-decoration: none;
+	}
+
+	.markdown-body sup {
+		font-size: 0.75em;
+		line-height: 0;
 	}
 }

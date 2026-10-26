@@ -1,7 +1,7 @@
 /**
- * GitHub light theme
+ * 代码高亮：浅色主题
  *
- * 配色取自 GitHub Primer（与 github-markdown-css 的 pl-* 规则一一对应）。
+ * 与站点的纸张色系对齐（暖白底 / 墨色文字 / 松柏绿与赭石点缀）。
  *
  * 代码块自身的底色 / 内边距 / 圆角只能写在这里：这个文件是运行时用 <link>
  * 插进 head 的、不带任何 @layer，而 src/style/markdown.css 里的规则都在
@@ -10,29 +10,29 @@
 
 code[class*='language-'],
 pre[class*='language-'] {
-	color: #1f2328; /* fg-default */
+	color: #2a2824;
 	font-family:
 		ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
 		'Liberation Mono', monospace;
+	font-size: 0.875rem;
 	direction: ltr;
 	text-align: left;
 	white-space: pre;
 	word-spacing: normal;
 	word-break: normal;
-	line-height: 1.45;
+	line-height: 1.7;
 
-	tab-size: 4;
+	tab-size: 2;
 	hyphens: none;
 }
 
 /* 代码块：上下外边距由外层 .group 容器给（见 src/components/CodeBlock.tsx） */
 pre[class*='language-'] {
 	margin: 0;
-	padding: 16px;
+	padding: 1.15rem 1.25rem;
 	overflow: auto;
-	background: #f6f8fa; /* canvas-subtle */
-	/* 页面底色是 zinc-50，跟 canvas-subtle 几乎一样，加条边才看得出是代码块 */
-	border: 1px solid #d1d9e0;
+	background: #f5f2eb;
+	border: 1px solid #e6e2d8;
 	border-radius: 6px;
 }
 
@@ -40,32 +40,32 @@ pre[class*='language-']::-moz-selection,
 pre[class*='language-'] ::-moz-selection,
 code[class*='language-']::-moz-selection,
 code[class*='language-'] ::-moz-selection {
-	background: #b4d8fd;
+	background: #d9e7df;
 }
 
 pre[class*='language-']::selection,
 pre[class*='language-'] ::selection,
 code[class*='language-']::selection,
 code[class*='language-'] ::selection {
-	background: #b4d8fd;
+	background: #d9e7df;
 }
 
 /* 行内代码（`.markdown-body :not(pre) > code` 兜底，这里只处理带语言标记的） */
 :not(pre) > code[class*='language-'] {
-	padding: 0.2em 0.4em;
-	border-radius: 6px;
-	background: rgb(129 139 152 / 12%);
+	padding: 0.18em 0.4em;
+	border-radius: 4px;
+	background: #f5f2eb;
 }
 
 .token.comment,
 .token.prolog,
 .token.doctype,
 .token.cdata {
-	color: #59636e; /* fg-muted */
+	color: #928d82;
 }
 
 .token.punctuation {
-	color: #1f2328;
+	color: #555149;
 }
 
 .token.namespace {
@@ -75,7 +75,7 @@ code[class*='language-'] ::selection {
 .token.tag,
 .token.selector,
 .token.attr-name {
-	color: #116329; /* green */
+	color: #2f6b57;
 }
 
 .token.property,
@@ -84,7 +84,7 @@ code[class*='language-'] ::selection {
 .token.constant,
 .token.symbol,
 .token.builtin {
-	color: #0550ae; /* blue */
+	color: #96602f;
 }
 
 .token.string,
@@ -93,37 +93,37 @@ code[class*='language-'] ::selection {
 .token.regex,
 .token.entity,
 .token.url {
-	color: #0a3069; /* dark blue */
+	color: #4f6b45;
 }
 
 .token.keyword,
 .token.atrule,
 .token.operator {
-	color: #cf222e; /* red */
+	color: #a8472f;
 }
 
 .token.function,
 .token.class-name {
-	color: #8250df; /* purple */
+	color: #3f6480;
 }
 
 .token.variable,
 .token.important {
-	color: #953800; /* orange */
+	color: #8a5a2b;
 }
 
 .token.deleted {
-	color: #82071e;
-	background: #ffebe9;
+	color: #9b3227;
+	background: #f6e3de;
 }
 
 .token.inserted {
-	color: #116329;
-	background: #dafbe1;
+	color: #2f6b57;
+	background: #e2efe6;
 }
 
 .token.bold {
-	font-weight: bold;
+	font-weight: 600;
 }
 
 .token.italic {

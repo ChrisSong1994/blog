@@ -1,28 +1,17 @@
-import { HourglassIcon, TagIcon, UTurnLeftIcon } from '@/assets';
 import { Container } from '@/components/Container';
 import MDXComponents from '@/components/MDXComponents';
-import { Separator } from '@/components/ui/separator';
+import { ReadingProgress } from '@/components/ReadingProgress';
 import siteMetadata from '@/config/site';
 import { withBasePath } from '@/lib/base-path';
-import {
-	getAdjacentPosts,
-	getPostBySlug,
-	blogPosts,
-	truncateTitle
-} from '@/lib/posts';
-import { cn } from '@/lib/utils';
+import { blogPosts, getAdjacentPosts, getPostBySlug } from '@/lib/posts';
 import { MDXContent } from '@content-collections/mdx/react';
 import dayjs from 'dayjs';
+import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Tag } from '../TagItem';
 import Toc from '../Toc';
-
-const variantStyles = {
-	secondary:
-		'group rounded-full bg-gradient-to-b from-zinc-50/50 to-white/90 px-3 py-2 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur transition dark:from-zinc-900/50 dark:to-zinc-800/90 dark:ring-white/10 dark:hover:ring-white/20'
-};
 
 interface TypeParams {
 	id: string;
@@ -31,20 +20,21 @@ interface TypeParams {
 /** 一篇文章都没有时的兜底页面 */
 function EmptyState() {
 	return (
-		<Container className="mt-16 min-h-[40vh]">
-			<h1 className="text-xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100">
+		<Container className="mt-20 min-h-[40vh]">
+			<p className="eyebrow">Empty</p>
+			<h1 className="mt-4 font-serif text-3xl font-semibold tracking-tight text-foreground">
 				还没有文章
 			</h1>
-			<p className="mt-4 max-w-2xl text-base text-zinc-600 dark:text-zinc-400">
+			<p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground">
 				在配置好的 Issues 仓库里新建一个 Issue，GitHub Actions
 				会自动把它同步成文章。也可以直接在 <code>posts/</code> 目录下新建{' '}
 				<code>.md</code> 或 <code>.mdx</code> 文件。
 			</p>
 			<Link
 				href="/posts"
-				className="mt-6 inline-block text-violet-500 hover:underline dark:text-violet-400"
+				className="mt-8 inline-flex items-center gap-2 text-sm text-link"
 			>
-				返回博客列表
+				返回文章列表
 			</Link>
 		</Container>
 	);
@@ -98,106 +88,114 @@ export default async function Page({
 	if (!post) notFound();
 
 	const { prevPost, nextPost } = getAdjacentPosts(post.slug);
+	const readingMinutes = Math.ceil(post.readingTime?.minutes ?? 0);
 
 	return (
-		<Container.Outer className="mt-10 lg:mt-16">
-			<Container.Inner className="!px-0" innerClassName="lg:max-w-none">
-				<div className="w-full gap-6 md:flex md:justify-between xl:relative">
-					<aside className="hidden w-50 shrink-0 pl-4 lg:block xl:w-60">
-						<div className="sticky top-2 pt-16">
+		<Container.Outer className="mt-8 sm:mt-12">
+			<Container.Inner innerClassName="lg:max-w-none">
+				<ReadingProgress />
+
+				<div className="mx-auto flex w-full max-w-[64rem] gap-16">
+					<article className="min-w-0 flex-1">
+						<div className="mx-auto w-full max-w-[46rem]">
+							<Link
+								href="/posts"
+								className="group inline-flex items-center gap-2 text-[13px] text-muted-foreground transition-colors hover:text-foreground"
+							>
+								<ArrowLeft
+									className="size-3.5 transition-transform group-hover:-translate-x-0.5"
+									aria-hidden="true"
+								/>
+								全部文章
+							</Link>
+
+							<header className="mt-10">
+								<h1 className="font-serif text-3xl leading-[1.2] font-semibold tracking-tight text-balance text-foreground sm:text-4xl lg:text-[2.75rem]">
+									{post.title}
+								</h1>
+
+								{post.description && (
+									<p className="mt-5 text-base leading-8 text-muted-foreground">
+										{post.description}
+									</p>
+								)}
+
+								<div className="mt-7 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] tracking-wider text-muted-foreground uppercase">
+									<time dateTime={post.date}>
+										{dayjs(post.date).format('YYYY-MM-DD')}
+									</time>
+									<span aria-hidden="true">·</span>
+									<span>{readingMinutes} 分钟阅读</span>
+									{post.author && (
+										<>
+											<span aria-hidden="true">·</span>
+											<span>{post.author}</span>
+										</>
+									)}
+								</div>
+
+								{post.tags?.length ? (
+									<div className="mt-5 flex flex-wrap gap-2">
+										{post.tags.map((tag) => (
+											<Tag key={tag}>{tag}</Tag>
+										))}
+									</div>
+								) : null}
+							</header>
+
+							{post.cover && (
+								<div className="relative mt-10 aspect-[2/1] overflow-hidden rounded-md border border-border/70 bg-surface-muted">
+									<Image
+										src={withBasePath(post.cover)}
+										alt={post.title}
+										fill
+										unoptimized
+										className="object-cover"
+									/>
+								</div>
+							)}
+
+							<div className="markdown-body js-toc-content mt-12">
+								<MDXContent code={post.body} components={MDXComponents} />
+							</div>
+
+							<nav
+								aria-label="文章导航"
+								className="mt-16 grid gap-8 border-t border-border/70 pt-8 sm:grid-cols-2"
+							>
+								{prevPost ? (
+									<Link href={`/posts/${prevPost.slug}`} className="group flex flex-col gap-2">
+										<span className="eyebrow">更新一篇</span>
+										<span className="font-serif text-lg leading-snug text-foreground transition-colors group-hover:text-brand">
+											{prevPost.title}
+										</span>
+									</Link>
+								) : (
+									<span />
+								)}
+
+								{nextPost ? (
+									<Link
+										href={`/posts/${nextPost.slug}`}
+										className="group flex flex-col gap-2 sm:items-end sm:text-right"
+									>
+										<span className="eyebrow">更早一篇</span>
+										<span className="font-serif text-lg leading-snug text-foreground transition-colors group-hover:text-brand">
+											{nextPost.title}
+										</span>
+									</Link>
+								) : (
+									<span />
+								)}
+							</nav>
+						</div>
+					</article>
+
+					<aside className="hidden w-56 shrink-0 lg:block">
+						<div className="sticky top-24">
 							<Toc />
 						</div>
 					</aside>
-					<div className="min-w-0 md:flex-1 md:shrink-0">
-						<Link
-							href="/posts"
-							className={cn(
-								'group mb-8 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md ring-1 shadow-zinc-800/5 ring-zinc-900/5 transition lg:absolute lg:-left-5 lg:-mt-2 lg:mb-0 xl:-top-1.5 xl:left-0 xl:mt-0 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0 dark:hover:border-zinc-700',
-								variantStyles.secondary
-							)}
-							aria-label="返回博客列表"
-						>
-							<UTurnLeftIcon className="h-8 w-8 stroke-zinc-500 transition group-hover:stroke-zinc-700 dark:stroke-zinc-500 dark:group-hover:stroke-zinc-400" />
-						</Link>
-						<article
-							data-postid={post.slug}
-							className="rich-text-viewer px-4"
-						>
-							<div className="mb-8 text-center">
-								{post.cover && (
-									<div className="relative mb-8 aspect-video overflow-hidden rounded-md bg-muted">
-										<Image
-											src={withBasePath(post.cover)}
-											alt={post.title}
-											fill
-											unoptimized
-											className="object-cover"
-										/>
-									</div>
-								)}
-								<h1 className="text-3xl font-bold">{post.title}</h1>
-								<div className="flex h-5 items-center justify-center space-x-4 text-sm">
-									<time
-										dateTime={post.date}
-										className="mb-1 text-xs text-gray-600 dark:text-gray-400"
-									>
-										{dayjs(post.date).format('YYYY-MM-DD')}
-									</time>
-									<Separator orientation="vertical" />
-									<span className="mb-1 flex items-center text-xs text-gray-600 dark:text-gray-400">
-										<HourglassIcon className="mr-2" />{' '}
-										{Math.ceil(post.readingTime?.minutes ?? 0)} 分钟
-									</span>
-								</div>
-								<div className="mt-2 flex w-full justify-center gap-2">
-									{post.tags?.map((tag) => (
-										<Tag key={tag}>{tag}</Tag>
-									))}
-								</div>
-								{post.description && (
-									<div className="relative mt-4 rounded-md bg-gray-200 p-4 dark:bg-gray-600">
-										<TagIcon className="absolute top-4 left-4" />
-										<p className="text-gray-700 dark:text-gray-300">
-											{post.description}
-										</p>
-									</div>
-								)}
-							</div>
-
-							<div className="markdown-body js-toc-content">
-								<MDXContent code={post.body} components={MDXComponents} />
-							</div>
-						</article>
-
-						{/* 上一篇 / 下一篇 */}
-						<div className="mt-8 flex justify-between px-4">
-							{prevPost ? (
-								<Link
-									href={`/posts/${prevPost.slug}`}
-									className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-violet-500 shadow-sm hover:bg-violet-200 focus:ring-2 focus:ring-violet-600 focus:ring-offset-2 focus:outline-none dark:text-violet-300 dark:hover:bg-violet-500"
-								>
-									{truncateTitle(prevPost.title)}
-								</Link>
-							) : (
-								<span className="leading-10 text-zinc-500 dark:text-zinc-200">
-									已经是第一篇了
-								</span>
-							)}
-
-							{nextPost ? (
-								<Link
-									href={`/posts/${nextPost.slug}`}
-									className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-violet-500 shadow-sm hover:bg-violet-200 focus:ring-2 focus:ring-violet-600 focus:ring-offset-2 focus:outline-none dark:text-violet-300 dark:hover:bg-violet-500"
-								>
-									{truncateTitle(nextPost.title)}
-								</Link>
-							) : (
-								<span className="leading-10 text-zinc-500 dark:text-zinc-200">
-									没有下一篇啦
-								</span>
-							)}
-						</div>
-					</div>
 				</div>
 			</Container.Inner>
 		</Container.Outer>
